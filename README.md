@@ -1,4 +1,4 @@
-# 剧合规（JuHeGui）
+# 剧合规（Sieve · 筛子）
 
 > AI 短剧 / 漫剧上线前合规预检工具链 —— 面向制作方、MCN 与平台方的一站式合规预检 SaaS。
 > Pre-launch compliance pre-check toolchain for AI short dramas & comic-dramas.
@@ -91,7 +91,7 @@ npm run dev                    # 开发（前后端热更新）
 - ✅ 自由使用、修改、自托管，包括公司内部生产环境
 - ✅ 单客户私有化部署与交付
 - ❌ 未经许可不得作为**多租户 SaaS** 对外收费运营
-- ❌ 不得使用「剧合规 / JuHeGui」商标于衍生产品（见 [NOTICE](NOTICE)）
+- ❌ 不得使用「剧合规 / Sieve」商标于衍生产品（见 [NOTICE](NOTICE)）
 
 商业授权、多租户 SaaS 运营授权与合作，请通过文末[联系方式](#联系方式-contact)洽谈。
 
@@ -140,7 +140,7 @@ npm run dev                    # 开发（前后端热更新）
 
 ## English
 
-**JuHeGui** is a pre-launch compliance pre-check toolchain for AI-generated short dramas and comic-dramas (漫剧), built for studios, MCNs, and platform operators subject to China's micro-drama regulations.
+**Sieve** is a pre-launch compliance pre-check toolchain for AI-generated short dramas and comic-dramas (漫剧), built for studios, MCNs, and platform operators subject to China's micro-drama regulations.
 
 **Highlights**
 

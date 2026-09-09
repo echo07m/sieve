@@ -23,7 +23,7 @@
     "quickLinks": "Quick links",
     "contactTitle": "Contact us",
     "contactBiz": "Business inquiries",
-    "contactWechat": "WeCom: JuHeGui Assistant (weekdays 10:00–19:00)",
+    "contactWechat": "WeCom: Sieve Assistant (weekdays 10:00–19:00)",
     "disclaimer": "This product provides pre-launch compliance pre-check references only and does not guarantee approval. Final outcomes are subject to platform and regulatory review."
   },
   "common": {
@@ -33,13 +33,13 @@
     "contactSales": "Contact sales"
   },
   "home": {
-    "docTitle": "JuHeGui - Pre-launch Compliance Pre-check for AI Short Dramas & Comic-dramas",
+    "docTitle": "Sieve - Pre-launch Compliance Pre-check for AI Short Dramas & Comic-dramas",
     "loginDashboard": "Sign in",
     "heroBadge": "Mandatory filing · AI labeling per episode · Four-party liability — the compliance line before launch",
     "heroTitlePre": "Before you submit, pass the",
     "heroTitleHighlight": "pre-check",
     "heroTitlePost": "first",
-    "heroDesc": "JuHeGui is a compliance pre-check SaaS for AI short dramas, built for the latest NRTA regulations: episode-by-episode detection across 8 violation categories with line-level localization, plus compliance self-checks, filing material generation, and hash-sealed evidence — all in one place, turning policy guesswork into a standard, billable workflow.",
+    "heroDesc": "Sieve is a compliance pre-check SaaS for AI short dramas, built for the latest NRTA regulations: episode-by-episode detection across 8 violation categories with line-level localization, plus compliance self-checks, filing material generation, and hash-sealed evidence — all in one place, turning policy guesswork into a standard, billable workflow.",
     "ctaPrimary": "Start pre-check",
     "ctaPricing": "View pricing",
     "features": [
@@ -103,8 +103,8 @@
     "faqTitle": "Frequently asked questions",
     "faqs": [
       {
-        "q": "Does a JuHeGui pre-check guarantee approval?",
-        "a": "No. JuHeGui provides pre-launch compliance references; every conclusion includes a confidence score and legal basis. Final approval is subject to platform and regulatory review."
+        "q": "Does a Sieve pre-check guarantee approval?",
+        "a": "No. Sieve provides pre-launch compliance references; every conclusion includes a confidence score and legal basis. Final approval is subject to platform and regulatory review."
       },
       {
         "q": "Which platform review baselines are supported?",
@@ -121,7 +121,7 @@
     "ctaTrial": "3 free trial checks"
   },
   "pricing": {
-    "docTitle": "Pricing - JuHeGui",
+    "docTitle": "Pricing - Sieve",
     "title": "Pricing",
     "subtitle": "Flexible billing per title, per month, or via annual API plans. Sign up to get 3 free trial checks. No in-platform payment — our sales team activates your plan one-on-one after you leave your contact.",
     "popularBadge": "Most popular",
@@ -185,7 +185,7 @@
     "dialogDesc": "Our sales team will contact you within 1 business day to confirm your needs and activate the plan."
   },
   "features": {
-    "docTitle": "Features - JuHeGui",
+    "docTitle": "Features - Sieve",
     "title": "Features",
     "subtitle": "From script pre-check to filing delivery — the full pre-launch compliance chain for AI short dramas and comic-dramas.",
     "sections": [
@@ -252,9 +252,9 @@
     ]
   },
   "docs": {
-    "docTitle": "Docs - JuHeGui",
+    "docTitle": "Docs - Sieve",
     "title": "Documentation",
-    "intro": "This document covers the JuHeGui quick-start flow, decision-baseline explanation, open API integration, and rule-library versioning.",
+    "intro": "This document covers the Sieve quick-start flow, decision-baseline explanation, open API integration, and rule-library versioning.",
     "quickTitle": "1. Quick start",
     "quickSteps": [
       {
@@ -296,7 +296,7 @@
     ],
     "criteriaNotePre": "Baselines marked \"industry interpretation\" summarize platform practices and are for reference only — ",
     "criteriaNoteStrong": "the original NRTA texts and latest notices always prevail",
-    "criteriaNotePost": ". JuHeGui provides pre-launch pre-check references and does not guarantee approval; final outcomes are subject to platform and regulatory review.",
+    "criteriaNotePost": ". Sieve provides pre-launch pre-check references and does not guarantee approval; final outcomes are subject to platform and regulatory review.",
     "apiTitle": "3. Open API",
     "apiDesc1": "The open API embeds compliance detection into your own production pipeline. The endpoint is",
     "apiDesc2": ", authenticated with a Bearer API Key (a 48-character hex string starting with",
@@ -397,13 +397,13 @@
     "recheckDesc": "Click \"Re-check after rectification\" on a report to launch a re-check with the same work title, automatically linked to the original report. Then pick the original report in the \"Re-check comparison\" block: hit differences are grouped as resolved / persisting / new, with the verdict change of both reports shown on top."
   },
   "faq": {
-    "docTitle": "FAQ - JuHeGui",
+    "docTitle": "FAQ - Sieve",
     "title": "Frequently asked questions",
     "subtitle": "Common questions about AI short-drama compliance pre-checks, platform baselines, data security, and billing.",
     "items": [
       {
-        "q": "Does a JuHeGui pre-check guarantee approval?",
-        "a": "No. JuHeGui provides pre-launch compliance references; every conclusion includes a confidence score and legal basis to help you find and fix high-risk content early. Final approval is subject to platform and regulatory review, and baselines marked \"industry interpretation\" defer to the original NRTA texts."
+        "q": "Does a Sieve pre-check guarantee approval?",
+        "a": "No. Sieve provides pre-launch compliance references; every conclusion includes a confidence score and legal basis to help you find and fix high-risk content early. Final approval is subject to platform and regulatory review, and baselines marked \"industry interpretation\" defer to the original NRTA texts."
       },
       {
         "q": "Which platform review baselines are supported?",
@@ -432,7 +432,7 @@
     ]
   },
   "titleCheck": {
-    "docTitle": "Title Check - JuHeGui",
+    "docTitle": "Title Check - Sieve",
     "badge": "Free tool · No sign-in · Based on the NRTA title-review baseline",
     "title": "Free short-drama title check",
     "subtitle": "Enter a title (optionally with promo copy) for an instant risk scan against the NRTA title-review baseline, with legal basis and rectification advice on every hit. De-risk your title before submission.",
@@ -465,7 +465,7 @@
     }
   },
   "filingWizard": {
-    "docTitle": "Filing Guide - JuHeGui",
+    "docTitle": "Filing Guide - Sieve",
     "badge": "Free tool · No sign-in · Aligned with the new short-drama filing tiers",
     "title": "Filing guide wizard",
     "subtitle": "Answer three questions to determine whether your work falls into the key, standard, or other tier, and get the filing path, AI-labeling duties, and materials checklist.",
@@ -505,9 +505,9 @@
     "ctaButton": "Sign up to generate the full kit"
   },
   "opensource": {
-    "docTitle": "Open Source - JuHeGui",
+    "docTitle": "Open Source - Sieve",
     "heroBadge": "Apache-2.0 with Additional Terms · Self-hostable",
-    "heroTitle": "JuHeGui Open Source",
+    "heroTitle": "Sieve Open Source",
     "heroTagline": "A self-hostable compliance pre-check engine for AI short dramas and comic-dramas, open-sourced under Apache-2.0 with Additional Terms: deploy freely on your own infrastructure — your data never leaves your network.",
     "licenseTitle": "License at a glance",
     "licenseAllows": [
@@ -516,7 +516,7 @@
     ],
     "licenseRestrictions": [
       "Multi-tenant SaaS resale requires a commercial license",
-      "The \"JuHeGui\" name and logo may not be used as trademarks"
+      "The \"Sieve\" name and logo may not be used as trademarks"
     ],
     "licenseNote": "See the LICENSE and NOTICE files in the repository for full terms.",
     "repoTitle": "GitHub repository",

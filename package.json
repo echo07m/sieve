@@ -1,5 +1,5 @@
 {
-  "name": "juhegui",
+  "name": "sieve",
   "private": true,
   "version": "0.0.0",
   "description": "剧合规：AI短剧/漫剧上线前合规预检工具链，8大违规类别集-句级定位、报告存证、平台差分适配与开放API",
