@@ -13,6 +13,12 @@ import { runDetection } from "../engine/orchestrator";
 import { consumeQuota, refundQuota } from "../queries/billing";
 import { getActiveRules, getLatestRuleVersion } from "../queries/compliance";
 import { getDb } from "../queries/connection";
+import {
+  createDetectTask,
+  getDetectTaskByNo,
+  runDetectForKey,
+  startDeliveryScanner,
+} from "../queries/detectTasks";
 
 const API_KEY_PATTERN = /^jhg_[0-9a-f]{48}$/;
 
@@ -164,4 +170,98 @@ export function registerV1Routes(app: Hono<any>): void {
       return c.json({ error: "检测执行失败，本次额度已退还，请稍后重试" }, 500);
     }
   });
+
+  // ============ 异步检测：POST /api/v1/detect/async → { taskNo } ============
+  app.post("/api/v1/detect/async", async (c) => {
+    const authHeader = c.req.header("Authorization") ?? "";
+    const token = /^Bearer\s+(.+)$/i.exec(authHeader)?.[1]?.trim() ?? "";
+    if (!API_KEY_PATTERN.test(token)) {
+      return c.json({ error: "缺少或格式错误的 API Key" }, 401);
+    }
+    const keyHash = createHash("sha256").update(token).digest("hex");
+    const db = getDb();
+    const [keyRow] = await db
+      .select()
+      .from(apiKeys)
+      .where(eq(apiKeys.keyHash, keyHash))
+      .limit(1);
+    if (!keyRow || keyRow.status !== "active") {
+      return c.json({ error: "API Key 无效或已吊销" }, 401);
+    }
+    if (hitRateLimit(keyHash)) {
+      return c.json({ error: "请求过于频繁，单 Key 限额 60 次/分钟" }, 429);
+    }
+
+    let rawBody: unknown;
+    try {
+      rawBody = await c.req.json();
+    } catch {
+      return c.json({ error: "请求体必须是合法 JSON" }, 400);
+    }
+    const parsed = detectBodySchema.safeParse(rawBody);
+    if (!parsed.success) {
+      return c.json(
+        { error: "请求参数校验失败", details: parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`) },
+        400,
+      );
+    }
+
+    try {
+      await consumeQuota(keyRow.userId);
+    } catch (e) {
+      if (e instanceof Error && e.message.startsWith("PRECHECK_QUOTA_EXHAUSTED")) {
+        return c.json({ error: "检测额度已用尽或订阅已到期", code: "QUOTA_EXHAUSTED" }, 402);
+      }
+      return c.json({ error: "计费服务暂不可用，请稍后重试" }, 500);
+    }
+
+    const { taskNo } = await createDetectTask(keyRow.userId, keyRow.id, {
+      ...parsed.data,
+      workType: parsed.data.workType,
+    });
+    return c.json(
+      {
+        taskNo,
+        status: "pending",
+        pollUrl: `/api/v1/tasks/${taskNo}`,
+        note: "结果可轮询 pollUrl 获取；配置 Webhook 后将以 detect.done 事件主动推送",
+      },
+      202,
+    );
+  });
+
+  // ============ 任务查询：GET /api/v1/tasks/:taskNo ============
+  app.get("/api/v1/tasks/:taskNo", async (c) => {
+    const authHeader = c.req.header("Authorization") ?? "";
+    const token = /^Bearer\s+(.+)$/i.exec(authHeader)?.[1]?.trim() ?? "";
+    if (!API_KEY_PATTERN.test(token)) {
+      return c.json({ error: "缺少或格式错误的 API Key" }, 401);
+    }
+    const keyHash = createHash("sha256").update(token).digest("hex");
+    const db = getDb();
+    const [keyRow] = await db
+      .select({ userId: apiKeys.userId })
+      .from(apiKeys)
+      .where(eq(apiKeys.keyHash, keyHash))
+      .limit(1);
+    if (!keyRow) {
+      return c.json({ error: "API Key 无效或已吊销" }, 401);
+    }
+    const task = await getDetectTaskByNo(c.req.param("taskNo"), keyRow.userId);
+    if (!task) {
+      return c.json({ error: "任务不存在" }, 404);
+    }
+    return c.json({
+      taskNo: task.taskNo,
+      status: task.status,
+      workTitle: task.workTitle,
+      createdAt: task.createdAt,
+      finishedAt: task.finishedAt,
+      ...(task.status === "done" ? { result: task.result } : {}),
+      ...(task.status === "failed" ? { error: task.error } : {}),
+    });
+  });
+
+  // Webhook 投递定时扫描器（模块注册时启动一次）
+  startDeliveryScanner();
 }

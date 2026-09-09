@@ -115,3 +115,25 @@ curl -X POST https://your-host/api/v1/detect \
 ```
 
 > 注：LLM 语义召回通道仅在部署方配置了 LLM 环境变量时启用；其召回命中置信度封顶并自动降级一级，最终判定权始终在规则引擎。
+
+## 异步检测（POST /api/v1/detect/async）
+
+与同步端点同参数，立即返回任务号（HTTP 202），后台执行检测：
+
+```json
+{ "taskNo": "DT-20260909-00000100", "status": "pending", "pollUrl": "/api/v1/tasks/DT-20260909-00000100" }
+```
+
+**轮询结果**：`GET /api/v1/tasks/{taskNo}`（同一 Bearer Key 鉴权），`status` 为
+`pending/processing/done/failed`；`done` 时 `result` 与同步端点响应同构。失败任务自动退还额度。
+
+## Webhook 回调
+
+在「工作台 → Webhook回调」配置端点后，任务完成会向你的服务器 POST 推送事件：
+
+- 事件：`detect.done` / `detect.failed` / `test.ping`（连通测试）
+- 请求头：`X-Sieve-Event`、`X-Sieve-Delivery`、`X-Sieve-Timestamp`、`X-Sieve-Signature`
+- 签名：`X-Sieve-Signature = "sha256=" + HMAC_SHA256(端点签名密钥, 原始请求体)`，接收端务必验签
+- 重推：失败按 1/4/9/16 分钟退避重推，最多 5 次；投递日志支持手动重推
+
+请求体结构：`{ "event": "detect.done", "data": { "taskNo", "status", "workTitle", "result" }, "timestamp" }`

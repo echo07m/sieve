@@ -31,6 +31,7 @@ import {
   Gauge,
   KeyRound,
   LayoutDashboard,
+  Radar,
   ListChecks,
   LogOut,
   PanelLeft,
@@ -42,6 +43,7 @@ import {
   Stamp,
   Upload,
   Users,
+  Webhook,
 } from "lucide-react";
 import { NotificationBell } from "@/components/NotificationBell";
 import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from "react";
@@ -62,6 +64,7 @@ const menuItems = [
   { icon: ListChecks, label: "平台差分", path: "/platforms" },
   { icon: SlidersHorizontal, label: "自定义规则", path: "/custom-rules" },
   { icon: KeyRound, label: "开放API", path: "/api-keys" },
+  { icon: Webhook, label: "Webhook回调", path: "/webhooks" },
   { icon: CreditCard, label: "计费与用量", path: "/billing" },
   { icon: Bell, label: "通知中心", path: "/notifications" },
 ];
@@ -75,6 +78,7 @@ const adminMenuItems = [
   { icon: CreditCard, label: "订单收款", path: "/admin/orders" },
   { icon: Send, label: "线索管理", path: "/admin/leads" },
   { icon: Landmark, label: "判例库管理", path: "/admin/cases" },
+  { icon: Radar, label: "政策雷达", path: "/admin/policy" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";

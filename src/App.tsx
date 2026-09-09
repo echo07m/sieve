@@ -35,6 +35,8 @@ import Privacy from "./pages/public/Privacy"
 import TitleCheck from "./pages/public/TitleCheck"
 import FilingWizard from "./pages/public/FilingWizard"
 import AdminCases from "./pages/admin/AdminCases";
+import AdminPolicy from "./pages/admin/AdminPolicy";
+import Webhooks from "./pages/Webhooks";
 import Cases from "./pages/public/Cases";
 import OpenSource from "./pages/public/OpenSource"
 
@@ -60,6 +62,7 @@ export default function App() {
       <Route path="/custom-rules" element={<CustomRules />} />
       <Route path="/billing" element={<Billing />} />
       <Route path="/notifications" element={<Notifications />} />
+      <Route path="/webhooks" element={<Webhooks />} />
       <Route path="/admin" element={<AdminOverview />} />
       <Route path="/admin/users" element={<AdminUsers />} />
       <Route path="/admin/rules" element={<AdminRules />} />
@@ -67,6 +70,7 @@ export default function App() {
       <Route path="/admin/orders" element={<AdminOrders />} />
       <Route path="/admin/leads" element={<LeadsAdmin />} />
       <Route path="/admin/cases" element={<AdminCases />} />
+      <Route path="/admin/policy" element={<AdminPolicy />} />
       <Route element={<PublicLayout />}>
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/features" element={<Features />} />

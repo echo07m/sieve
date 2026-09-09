@@ -573,3 +573,107 @@ export const precedentCases = mysqlTable(
 );
 
 export type PrecedentCase = typeof precedentCases.$inferSelect;
+
+// ============================================================
+// 开放 API 工作流：异步检测任务 + Webhook 回调
+// ============================================================
+
+/** 异步检测任务：POST /api/v1/detect/async 创建，进程内 worker 执行 */
+export const detectTasks = mysqlTable(
+  "detect_tasks",
+  {
+    id: serial("id").primaryKey(),
+    taskNo: varchar("taskNo", { length: 40 }).notNull().unique(), // DT-YYYYMMDD-NNNNNN
+    userId: bigint("userId", { mode: "number", unsigned: true }).notNull(),
+    apiKeyId: bigint("apiKeyId", { mode: "number", unsigned: true }).notNull(),
+    workTitle: varchar("workTitle", { length: 255 }).notNull(),
+    status: mysqlEnum("status", ["pending", "processing", "done", "failed"])
+      .notNull()
+      .default("pending"),
+    input: json("input").$type<{
+      workTitle: string;
+      scriptText: string;
+      targetPlatform: string;
+      workType?: string;
+    }>().notNull(),
+    result: json("result").$type<Record<string, unknown>>(), // 与同步端点同构
+    error: varchar("error", { length: 500 }).notNull().default(""),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    finishedAt: timestamp("finishedAt"),
+  },
+  (t) => [index("detect_tasks_userId_idx").on(t.userId, t.status)],
+);
+
+export type DetectTask = typeof detectTasks.$inferSelect;
+
+/** Webhook 端点：用户配置的回调地址（签名密钥服务端生成） */
+export const webhookEndpoints = mysqlTable(
+  "webhook_endpoints",
+  {
+    id: serial("id").primaryKey(),
+    userId: bigint("userId", { mode: "number", unsigned: true }).notNull(),
+    name: varchar("name", { length: 64 }).notNull().default(""),
+    url: varchar("url", { length: 300 }).notNull(),
+    secret: varchar("secret", { length: 80 }).notNull(), // whsec_xxx，HMAC-SHA256 签名
+    isActive: boolean("isActive").notNull().default(true),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  (t) => [index("webhook_endpoints_userId_idx").on(t.userId)],
+);
+
+export type WebhookEndpoint = typeof webhookEndpoints.$inferSelect;
+
+/** Webhook 投递记录：签名 + 失败重推（最多 5 次，退避） */
+export const webhookDeliveries = mysqlTable(
+  "webhook_deliveries",
+  {
+    id: serial("id").primaryKey(),
+    endpointId: bigint("endpointId", { mode: "number", unsigned: true }).notNull(),
+    taskId: bigint("taskId", { mode: "number", unsigned: true }),
+    event: varchar("event", { length: 32 }).notNull(), // detect.done / detect.failed / test.ping
+    payload: json("payload").$type<Record<string, unknown>>().notNull(),
+    status: mysqlEnum("status", ["pending", "success", "failed"])
+      .notNull()
+      .default("pending"),
+    attempts: int("attempts").notNull().default(0),
+    responseCode: int("responseCode"),
+    lastError: varchar("lastError", { length: 500 }).notNull().default(""),
+    nextRetryAt: timestamp("nextRetryAt"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    deliveredAt: timestamp("deliveredAt"),
+  },
+  (t) => [index("webhook_deliveries_status_idx").on(t.status, t.nextRetryAt)],
+);
+
+export type WebhookDelivery = typeof webhookDeliveries.$inferSelect;
+
+// ============================================================
+// 政策雷达：新规动态录入 + 影响评估 + 转规则草稿
+// ============================================================
+
+/** 政策动态：管理员录入的监管/平台新规，评估对规则库的影响 */
+export const policyUpdates = mysqlTable(
+  "policy_updates",
+  {
+    id: serial("id").primaryKey(),
+    title: varchar("title", { length: 255 }).notNull(),
+    source: varchar("source", { length: 128 }).notNull().default(""), // 广电总局/平台公告…
+    sourceUrl: varchar("sourceUrl", { length: 300 }).notNull().default(""),
+    publishedAt: timestamp("publishedAt"),
+    summary: varchar("summary", { length: 1000 }).notNull(),
+    impactAssessment: varchar("impactAssessment", { length: 1000 }).notNull().default(""), // 对现有规则的影响分析
+    relatedRuleCodes: json("relatedRuleCodes").$type<string[]>().notNull(), // 受影响规则
+    status: mysqlEnum("status", ["pending", "reviewed", "converted"])
+      .notNull()
+      .default("pending"), // pending 待评估 / reviewed 已评估 / converted 已转规则草稿
+    draftRuleCode: varchar("draftRuleCode", { length: 32 }).notNull().default(""), // 转换后的规则 code
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .defaultNow()
+      .notNull()
+      .$onUpdate(() => new Date()),
+  },
+  (t) => [index("policy_updates_status_idx").on(t.status, t.publishedAt)],
+);
+
+export type PolicyUpdate = typeof policyUpdates.$inferSelect;

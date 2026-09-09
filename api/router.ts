@@ -14,10 +14,12 @@ import { notificationsRouter } from "./notificationsRouter";
 import { publicToolsRouter } from "./publicToolsRouter";
 import { createRouter, publicQuery } from "./middleware";
 import { platformsRouter } from "./platformsRouter";
+import { policyRouter } from "./policyRouter";
 import { precedentRouter } from "./precedentRouter";
 import { remediateRouter } from "./remediateRouter";
 import { rulesRouter } from "./rulesRouter";
 import { submissionsRouter } from "./submissionsRouter";
+import { webhooksRouter } from "./webhooksRouter";
 
 export const appRouter = createRouter({
   ping: publicQuery.query(() => ({ ok: true, ts: Date.now() })),
@@ -40,6 +42,8 @@ export const appRouter = createRouter({
   tools: publicToolsRouter,
   precedents: precedentRouter,
   remediate: remediateRouter,
+  webhooks: webhooksRouter,
+  policy: policyRouter,
 });
 
 export type AppRouter = typeof appRouter;
