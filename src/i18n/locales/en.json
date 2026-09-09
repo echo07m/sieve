@@ -1,0 +1,551 @@
+{
+  "nav": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "titleCheck": "Title Check",
+    "filingWizard": "Filing Guide",
+    "docs": "Docs",
+    "faq": "FAQ",
+    "opensource": "Open Source",
+    "login": "Sign in",
+    "dashboard": "Dashboard",
+    "menuLabel": "Open navigation menu"
+  },
+  "footer": {
+    "tagline": "Pre-launch compliance pre-check for AI short dramas & comic-dramas",
+    "product": "Product",
+    "resources": "Resources",
+    "legal": "Legal",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "opensource": "Open Source",
+    "rights": "All rights reserved",
+    "quickLinks": "Quick links",
+    "contactTitle": "Contact us",
+    "contactBiz": "Business inquiries",
+    "contactWechat": "WeCom: JuHeGui Assistant (weekdays 10:00–19:00)",
+    "disclaimer": "This product provides pre-launch compliance pre-check references only and does not guarantee approval. Final outcomes are subject to platform and regulatory review."
+  },
+  "common": {
+    "learnMore": "Learn more",
+    "getStarted": "Get started",
+    "freeStart": "Start for free",
+    "contactSales": "Contact sales"
+  },
+  "home": {
+    "docTitle": "JuHeGui - Pre-launch Compliance Pre-check for AI Short Dramas & Comic-dramas",
+    "loginDashboard": "Sign in",
+    "heroBadge": "Mandatory filing · AI labeling per episode · Four-party liability — the compliance line before launch",
+    "heroTitlePre": "Before you submit, pass the",
+    "heroTitleHighlight": "pre-check",
+    "heroTitlePost": "first",
+    "heroDesc": "JuHeGui is a compliance pre-check SaaS for AI short dramas, built for the latest NRTA regulations: episode-by-episode detection across 8 violation categories with line-level localization, plus compliance self-checks, filing material generation, and hash-sealed evidence — all in one place, turning policy guesswork into a standard, billable workflow.",
+    "ctaPrimary": "Start pre-check",
+    "ctaPricing": "View pricing",
+    "features": [
+      {
+        "title": "Script compliance pre-check",
+        "desc": "Episode-by-episode scanning across 8 violation categories: child-harmful content, soft-porn innuendo, money-worship and flaunting wealth, distorted views on marriage, feudal dross, violent revenge, vulgar titles, and IP infringement. Every hit ships with the legal basis, a confidence score, and rectification advice."
+      },
+      {
+        "title": "Filing material generation",
+        "desc": "Generates the three-piece filing kit — work info sheet, script synopsis, and cost breakdown — following each platform's self-review templates, with explicit prompts for missing fields and annotated tiering for AI-produced dramas."
+      },
+      {
+        "title": "Evidence & audit trail",
+        "desc": "Every pre-check report carries a SHA-256 content hash, generation timestamp, and rule-library version, so each conclusion can be traced back to the exact regulatory baseline in effect at the time."
+      }
+    ],
+    "freeToolsTitle": "Free tools, ready to use",
+    "freeToolsDesc": "No sign-in required: de-risk your title first, then confirm which filing channel applies.",
+    "freeTools": [
+      {
+        "title": "Title Check",
+        "desc": "Enter a title and promo copy to get an instant risk verdict against the NRTA title-review baseline, with legal basis and rectification advice."
+      },
+      {
+        "title": "Filing Guide",
+        "desc": "Determines the key / standard / other tier from work type and investment, and outputs the filing path, AI-labeling duties, and materials checklist."
+      }
+    ],
+    "painsTitle": "Why pre-check before launch?",
+    "painsDesc": "With regulation tightening, compliance is no longer a post-launch fix — it's a question you must answer before submission.",
+    "pains": [
+      {
+        "title": "Regulation fully tightens in 2026",
+        "desc": "New NRTA rules are in force: mandatory short-drama filing, per-episode AI labeling, and four-party liability across platforms and producers. The room to launch first and patch later is gone — non-compliant content is stopped at the review gate."
+      },
+      {
+        "title": "The real cost of takedowns and rejections",
+        "desc": "A takedown sinks production cost, ad spend, and release slots; a single platform rejection raises the trust cost of future deals. Most causes — borderline dialogue, AI-spoofed classic IP, missing AI labels — can all be caught before launch."
+      },
+      {
+        "title": "Pre-check makes compliance routine",
+        "desc": "Pre-launch checking turns policy interpretation into a billable, standardized scan: get the hit list and rectification advice before you submit, fix, then submit — spend your time creating, not reworking."
+      }
+    ],
+    "tags": [
+      "8-category script pre-check",
+      "Subtitle timecode localization",
+      "AI-spoof red-line detection",
+      "AI labeling compliance check",
+      "Scene deduplication",
+      "License-chain records",
+      "Filing kit generation",
+      "Tier determination",
+      "Filing agency tracking",
+      "Analytics dashboard",
+      "Platform-specific baselines",
+      "Custom rules",
+      "Open API",
+      "Hash-sealed reports"
+    ],
+    "faqTitle": "Frequently asked questions",
+    "faqs": [
+      {
+        "q": "Does a JuHeGui pre-check guarantee approval?",
+        "a": "No. JuHeGui provides pre-launch compliance references; every conclusion includes a confidence score and legal basis. Final approval is subject to platform and regulatory review."
+      },
+      {
+        "q": "Which platform review baselines are supported?",
+        "a": "A universal baseline is built in, with platform-specific calibration for Hongguo Short Drama, Fanqie Novel, Kuaishou Xingmang, and WeChat mini-program dramas. The same script can be checked against each platform baseline to compare hits."
+      },
+      {
+        "q": "How does billing and activation work?",
+        "a": "Sign up to get 3 free trial checks. Script pre-checks run ¥800–1,500 per title, team subscriptions ¥1,500–4,000 per month, and API annual plans ¥200K–600K per year. No in-platform payment — leave your contact and our team activates your plan one-on-one."
+      }
+    ],
+    "faqMore": "View all FAQs →",
+    "ctaTitle": "De-risk your next title before it goes live",
+    "ctaDesc": "Sign up for 3 free script trial checks with evidence-sealed reports; for per-title detection or team collaboration, see our pricing.",
+    "ctaTrial": "3 free trial checks"
+  },
+  "pricing": {
+    "docTitle": "Pricing - JuHeGui",
+    "title": "Pricing",
+    "subtitle": "Flexible billing per title, per month, or via annual API plans. Sign up to get 3 free trial checks. No in-platform payment — our sales team activates your plan one-on-one after you leave your contact.",
+    "popularBadge": "Most popular",
+    "plans": {
+      "free": {
+        "name": "Free Trial",
+        "priceText": "¥0",
+        "periodText": "On sign-up",
+        "features": [
+          "3 script pre-check credits",
+          "8 violation category detection",
+          "Pre-check report with evidence number"
+        ],
+        "cta": "Start for free"
+      },
+      "per_use": {
+        "name": "Pay per Title",
+        "priceText": "¥800–1,500/title",
+        "periodText": "Script pre-check; full cut + filing kit ¥2,000–4,000/title",
+        "features": [
+          "Full detection for one script or cut",
+          "Filing materials checklist",
+          "Platform calibration (Hongguo/Kuaishou etc.)"
+        ],
+        "cta": "Contact to activate"
+      },
+      "team": {
+        "name": "Team Subscription",
+        "priceText": "¥1,500–4,000/mo",
+        "periodText": "Monthly subscription for teams",
+        "features": [
+          "60 detection credits per month",
+          "Custom rule library",
+          "Dashboard & export",
+          "Priority rule-library updates"
+        ],
+        "cta": "Contact to activate"
+      },
+      "enterprise": {
+        "name": "Enterprise API Annual",
+        "priceText": "¥200K–600K/yr",
+        "periodText": "API access + private deployment option",
+        "features": [
+          "Unlimited open API calls",
+          "Dedicated rule customization & on-site support",
+          "SLA & compliance consulting"
+        ],
+        "cta": "Book a call"
+      }
+    },
+    "notesTitle": "Pricing notes",
+    "notes": [
+      "Script pre-check: ¥800–1,500 per title (includes 8-category detection and line-level localization report).",
+      "Full cut + filing kit: ¥2,000–4,000 per title (includes AI-labeling checks and the three-piece filing kit).",
+      "Team subscription: ¥1,500–4,000 per month (monthly detection quota, custom rule library, and dashboard).",
+      "API annual plan: ¥200K–600K per year (unlimited open API calls, private deployment option).",
+      "Free trial: 3 script pre-check credits on sign-up to evaluate detection quality."
+    ],
+    "notesFooter": "No in-platform payment: click \"Contact to activate / Book a call\" on any plan and leave your contact — our team will reach out within 1 business day to confirm your needs and activate the corresponding quota.",
+    "dialogTitle": "Contact to activate",
+    "dialogDesc": "Our sales team will contact you within 1 business day to confirm your needs and activate the plan."
+  },
+  "features": {
+    "docTitle": "Features - JuHeGui",
+    "title": "Features",
+    "subtitle": "From script pre-check to filing delivery — the full pre-launch compliance chain for AI short dramas and comic-dramas.",
+    "sections": [
+      {
+        "title": "8 violation categories",
+        "desc": "Compliance detection for AI short dramas aligned with the latest NRTA rules, covering child-harmful content, soft-porn innuendo, money-worship, distorted marriage views, feudal dross, violent revenge, vulgar titles, and IP infringement. Scripts are scanned episode by episode; every hit ships with legal basis, confidence, and rectification advice — turning review from guesswork into a report."
+      },
+      {
+        "title": "Line-level localization (with timecodes)",
+        "desc": "Hits are pinpointed to the exact episode and line of dialogue; full-cut detection adds subtitle timecodes so editors and writers can fix at the point instead of reworking whole episodes — cutting the rectification loop from days to hours."
+      },
+      {
+        "title": "AI-spoof detection (classic IP × spoof co-occurrence)",
+        "desc": "Built-in libraries of classic IP elements and high-risk adaptation patterns: when both co-occur in a script, it is flagged as an AI-spoof risk. Three-channel matching (keyword, semantic, scene fingerprint) reduces misses, with the applicable regulatory baseline attached."
+      },
+      {
+        "title": "AI labeling checks",
+        "desc": "Aligned with the mandatory per-episode AI-labeling requirement: verifies that AI-generated-content labels on cuts and posters are compliant, prominent, and present on every episode, outputting a missing-label list and fix suggestions to avoid platform rejection."
+      },
+      {
+        "title": "Copyright self-check",
+        "desc": "Scene deduplication and license-chain records: fingerprint-matching of dialogue and scenes flags similarity risks against known works, while IP licensing materials are recorded — a complete copyright self-check in one pass."
+      },
+      {
+        "title": "Platform-specific calibration",
+        "desc": "Check the same script against the baselines of Hongguo Short Drama, Fanqie Novel, Kuaishou Xingmang, and WeChat mini-program dramas to compare differentiated hits. Filing and approval strategies are tuned per platform — one detection, reused everywhere."
+      },
+      {
+        "title": "Filing kit & agency tracking",
+        "desc": "Generates the three-piece kit (work info sheet, script synopsis, cost breakdown) per platform self-review templates, with explicit prompts for missing fields and annotated AI-drama tiering. Agency filing progress is trackable — no more WeChat-group relay."
+      },
+      {
+        "title": "Analytics dashboard",
+        "desc": "Team-level views of submission volume, hit distribution, rectification rate, and violation-category trends — helping content leads see which genres cross lines most and turning compliance experience into reviewable data."
+      },
+      {
+        "title": "Open API",
+        "desc": "An open API (POST /api/v1/detect) embeds AI short-drama compliance detection into your production pipeline and internal systems, with unlimited calls on annual plans. See the docs page for curl examples and field reference."
+      },
+      {
+        "title": "Custom rule library",
+        "desc": "Layer team-defined rules on top of the universal library: proprietary red-line words, genre-specific no-go zones, and client-mandated baselines can all be configured as detection rules — versioned and effective independently of the official library."
+      },
+      {
+        "title": "Hash-sealed reports (SHA-256 + rule version)",
+        "desc": "Every report carries a SHA-256 content hash, generation timestamp, and rule-library version, so conclusions can be traced back to the exact baseline in effect — credible evidence for internal reviews and disputes."
+      },
+      {
+        "title": "Rectification re-check & diff",
+        "desc": "Re-check a script in one click after fixes; the re-check is automatically linked to the original report. Hit differences are grouped as resolved / persisting / new, making rectification impact obvious at a glance."
+      },
+      {
+        "title": "Free title check",
+        "desc": "No sign-in required: scans titles and promo copy against the NRTA title-review baseline and returns a risk verdict, legal basis, and renaming advice in seconds — de-risk your title before submission."
+      },
+      {
+        "title": "Filing guide wizard",
+        "desc": "No sign-in required: determines the key / standard / other micro-drama tier from work type and investment, then outputs the filing path, AI-labeling duties, and materials checklist — no more guessing which channel to file through."
+      },
+      {
+        "title": "GB 45438 labeling self-check",
+        "desc": "An explicit/implicit AI-labeling checklist aligned with the GB 45438-2025 national standard: verify font height, opening frame, display duration, and metadata fields item by item, with progress saved locally."
+      }
+    ]
+  },
+  "docs": {
+    "docTitle": "Docs - JuHeGui",
+    "title": "Documentation",
+    "intro": "This document covers the JuHeGui quick-start flow, decision-baseline explanation, open API integration, and rule-library versioning.",
+    "quickTitle": "1. Quick start",
+    "quickSteps": [
+      {
+        "b": "Sign up and sign in: ",
+        "t": "Click \"Sign in\" at the top right to enter the dashboard; new accounts get 3 free script pre-check credits."
+      },
+      {
+        "b": "New submission: ",
+        "t": "Click \"New submission\" in the dashboard, enter the work title, and choose the target platform baseline (Hongguo / Fanqie / Kuaishou / WeChat mini-program drama, or the universal baseline)."
+      },
+      {
+        "b": "Paste the script: ",
+        "t": "Paste the full script into the text box (keep \"Episode X\" markers for line-level localization) and submit for detection."
+      },
+      {
+        "b": "Review the report: ",
+        "t": "Once complete, review the overall verdict and each hit — every hit includes episode number, line-level position, legal basis, confidence, and rectification advice; each report is hash-sealed with SHA-256 and the rule version."
+      }
+    ],
+    "criteriaTitle": "2. Decision baseline",
+    "triChannelTitle": "Three-channel matching",
+    "triChannelDesc": "The detection engine jointly decides across three channels: keyword matching ensures high-risk red lines are never missed, semantic matching catches rewrites and variants, and scene-fingerprint matching detects structural plagiarism and AI-spoof co-occurrence.",
+    "confTitle": "Confidence & legal basis",
+    "confDesc": "Every hit includes a 0–1 confidence score and the corresponding regulatory basis. Prioritize rectification by severity, then confidence.",
+    "severityTitle": "Three severity levels",
+    "severities": [
+      {
+        "b": "block: ",
+        "t": "Any single hit makes the whole work high-risk; it must be rectified before submission."
+      },
+      {
+        "b": "high: ",
+        "t": "A confidence-weighted verdict; rectification is recommended before submission."
+      },
+      {
+        "b": "notice: ",
+        "t": "Low-risk flag for manual review."
+      }
+    ],
+    "criteriaNotePre": "Baselines marked \"industry interpretation\" summarize platform practices and are for reference only — ",
+    "criteriaNoteStrong": "the original NRTA texts and latest notices always prevail",
+    "criteriaNotePost": ". JuHeGui provides pre-launch pre-check references and does not guarantee approval; final outcomes are subject to platform and regulatory review.",
+    "apiTitle": "3. Open API",
+    "apiDesc1": "The open API embeds compliance detection into your own production pipeline. The endpoint is",
+    "apiDesc2": ", authenticated with a Bearer API Key (a 48-character hex string starting with",
+    "apiDesc3": ", created on the \"API Keys\" page after signing in; each key is rate-limited to 60 requests/minute).",
+    "curlTitle": "Example request",
+    "curlExample": "curl -X POST https://<your-domain>/api/v1/detect \\\n  -H \"Authorization: Bearer jhg_<your-48-char-api-key>\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"workTitle\": \"Sample short drama\",\n    \"scriptText\": \"Episode 1\\n...full script...\",\n    \"targetPlatform\": \"hongguo\",\n    \"workType\": \"ai_drama\"\n  }'",
+    "reqFieldsTitle": "Request fields",
+    "respFieldsTitle": "Response fields",
+    "hitsTitle": "hits[] detail fields",
+    "headField": "Field",
+    "headType": "Type / constraints",
+    "headDesc": "Description",
+    "requestFields": [
+      [
+        "workTitle",
+        "string, required, ≤255 chars",
+        "Work title, used in reports and title-violation detection"
+      ],
+      [
+        "scriptText",
+        "string, required, 50–2,000,000 chars",
+        "Full script text (episode markers supported for per-episode localization)"
+      ],
+      [
+        "targetPlatform",
+        "string, optional, defaults to universal",
+        "Target platform baseline: universal / hongguo / fanqie / kuaishou / wechat"
+      ],
+      [
+        "workType",
+        "string, optional",
+        "Work type: ai_drama / ai_comic / live_drama"
+      ]
+    ],
+    "responseFields": [
+      [
+        "verdict",
+        "Overall verdict: high_risk / pass etc., weighted by hit severity"
+      ],
+      [
+        "summary",
+        "Verdict summary and per-category hit counts"
+      ],
+      [
+        "hits[]",
+        "Array of hit details; fields described in the next table"
+      ],
+      [
+        "ruleVersion",
+        "Rule-library version used, for baseline traceability"
+      ],
+      [
+        "reportHash",
+        "SHA-256 evidence hash of the report (hits + ruleVersion + timestamp)"
+      ],
+      [
+        "disclaimer",
+        "Standard disclaimer text"
+      ]
+    ],
+    "hitFields": [
+      [
+        "episodeNo / location",
+        "Episode number and line-level position of the hit (timecodes for cuts)"
+      ],
+      [
+        "spanText",
+        "The matched text span"
+      ],
+      [
+        "category / ruleCode",
+        "Violation category and matched rule code"
+      ],
+      [
+        "severity",
+        "Severity: block / high / notice"
+      ],
+      [
+        "confidence",
+        "Confidence score (0–1, two decimals)"
+      ],
+      [
+        "basis / remediation",
+        "Legal basis and rectification advice"
+      ]
+    ],
+    "apiErrors": "Common error codes: 401 (key missing/invalid/revoked), 402 (quota exhausted — renew or upgrade to an annual plan), 429 (rate limited), 400 (request validation failed). Annual-plan users enjoy unlimited calls; apply via the pricing page.",
+    "rulesTitle": "4. Rule-library versioning",
+    "rulesDesc": "The rule library rolls forward with NRTA regulation updates and platform baseline changes, each update producing an incremented rule version. Detection combines the official base rules with your custom stricter rules; every report records the rule version used, so historical reports can be traced back to the exact baseline. Team subscribers get priority rule-library updates.",
+    "toolsTitle": "5. Free tools & rectification loop",
+    "titleCheckTitle": "Title check (no sign-in)",
+    "titleCheckDesc": "Open the public \"Title Check\" tool (/tools/title-check), enter a title and optional promo copy, and get an instant risk verdict, matched rules, legal basis, and rectification advice against the NRTA title-review baseline.",
+    "wizardTitle": "Filing guide wizard (no sign-in)",
+    "wizardDesc": "Open the public \"Filing Guide\" tool (/tools/filing-wizard), choose the work type, enter the investment, and self-assess AI share to get the key / standard / other tier, the filing path, AI-labeling duties, and a materials checklist.",
+    "gbTitle": "GB 45438 labeling self-check",
+    "gbDesc": "The dashboard's \"AI labeling compliance\" page includes a GB 45438-2025 self-check list: 5 explicit-label items and 3 implicit-label items, checked off one by one with progress saved in your browser.",
+    "recheckTitle": "Rectification re-check & diff",
+    "recheckDesc": "Click \"Re-check after rectification\" on a report to launch a re-check with the same work title, automatically linked to the original report. Then pick the original report in the \"Re-check comparison\" block: hit differences are grouped as resolved / persisting / new, with the verdict change of both reports shown on top."
+  },
+  "faq": {
+    "docTitle": "FAQ - JuHeGui",
+    "title": "Frequently asked questions",
+    "subtitle": "Common questions about AI short-drama compliance pre-checks, platform baselines, data security, and billing.",
+    "items": [
+      {
+        "q": "Does a JuHeGui pre-check guarantee approval?",
+        "a": "No. JuHeGui provides pre-launch compliance references; every conclusion includes a confidence score and legal basis to help you find and fix high-risk content early. Final approval is subject to platform and regulatory review, and baselines marked \"industry interpretation\" defer to the original NRTA texts."
+      },
+      {
+        "q": "Which platform review baselines are supported?",
+        "a": "A universal baseline is built in, with platform-specific calibration for Hongguo Short Drama, Fanqie Novel, Kuaishou Xingmang, and WeChat mini-program dramas. The same script can be checked against each platform baseline to compare hits."
+      },
+      {
+        "q": "How is AI-spoofing detected?",
+        "a": "The system maintains a co-occurrence library of classic IP elements and spoofed plot patterns, and matches scripts across three channels (keyword, semantic, scene fingerprint). When classic IP elements co-occur with high-risk adaptation patterns, it is flagged as an AI-spoof risk with legal basis and rectification advice."
+      },
+      {
+        "q": "Is my script data safe? Will it be retained or leaked?",
+        "a": "Frame sampling of full cuts is hashed locally and original files are retained minimally; script text is used only for the current detection and report generation. Reports are sealed with a SHA-256 hash and rule version, traceable to the exact baseline at the time."
+      },
+      {
+        "q": "How does billing and activation work?",
+        "a": "Sign up to get 3 free trial checks. Script pre-checks are ¥800–1,500 per title, full cut + filing kit ¥2,000–4,000 per title, team subscriptions ¥1,500–4,000 per month, and API annual plans ¥200K–600K per year. No in-platform payment — leave your contact on the pricing page and our team activates your plan one-on-one."
+      },
+      {
+        "q": "How often is the rule library updated?",
+        "a": "The rule library rolls forward with NRTA regulation updates and platform baseline changes, each update producing a new rule version. Historical reports can be traced back via the rule version recorded on them; team subscribers get priority updates."
+      },
+      {
+        "q": "How do I apply for the open API?",
+        "a": "After signing in, create a key yourself on the \"API Keys\" page (starting with jhg_) to call POST /api/v1/detect. Each key is rate-limited to 60 requests/minute and counts against your plan quota. For unlimited calls or private deployment, choose \"Enterprise API Annual\" on the pricing page and our team will set it up with you."
+      }
+    ]
+  },
+  "titleCheck": {
+    "docTitle": "Title Check - JuHeGui",
+    "badge": "Free tool · No sign-in · Based on the NRTA title-review baseline",
+    "title": "Free short-drama title check",
+    "subtitle": "Enter a title (optionally with promo copy) for an instant risk scan against the NRTA title-review baseline, with legal basis and rectification advice on every hit. De-risk your title before submission.",
+    "cardTitle": "Title details",
+    "cardDesc": "Title is required; promo copy (poster slogans, ad copy, etc.) is optional",
+    "titleLabel": "Title *",
+    "titlePlaceholder": "e.g. The CEO's Vengeful Bride",
+    "promoLabel": "Promo copy (optional)",
+    "promoPlaceholder": "Paste poster slogans, ad copy, etc. (max 500 chars)",
+    "checking": "Checking…",
+    "run": "Check now",
+    "errorFallback": "Check failed, please try again later",
+    "toastNoTitle": "Please enter a title",
+    "toastTooLong": "Title must be at most 64 characters",
+    "checkedRules": "\"{{title}}\" · checked against {{count}} title rules",
+    "noHitTitle": "Great news — no risk rules matched",
+    "noHitDesc": "The title and promo copy matched no rules in the current title rule library; the full script may still carry other violation risks — run a full pre-check before submission.",
+    "basis": "Basis: ",
+    "remediation": "Rectification: ",
+    "ctaButton": "Sign up for full script detection",
+    "verdicts": {
+      "high_risk": "High risk — rename recommended",
+      "attention": "Needs attention",
+      "low_risk": "No risks detected"
+    },
+    "severities": {
+      "block": "Block",
+      "high": "High",
+      "notice": "Notice"
+    }
+  },
+  "filingWizard": {
+    "docTitle": "Filing Guide - JuHeGui",
+    "badge": "Free tool · No sign-in · Aligned with the new short-drama filing tiers",
+    "title": "Filing guide wizard",
+    "subtitle": "Answer three questions to determine whether your work falls into the key, standard, or other tier, and get the filing path, AI-labeling duties, and materials checklist.",
+    "step1Title": "1. Work type",
+    "workTypes": {
+      "ai_drama": {
+        "label": "AI short drama",
+        "desc": "Short drama with AI-assisted script, visuals, or voice"
+      },
+      "ai_comic": {
+        "label": "AI comic-drama",
+        "desc": "Motion comic with mostly AI-generated visuals"
+      },
+      "live_drama": {
+        "label": "Live-action drama",
+        "desc": "Live-action micro short drama"
+      }
+    },
+    "step2Title": "2. Investment (¥10K)",
+    "step2Desc": "Enter the total production cost accurately — used for tier determination",
+    "investPlaceholder": "e.g. 120",
+    "step3Title": "3. AI share self-assessment",
+    "step3Desc": "If AI accounts for ≥70% of any stage, an \"AI-assisted production\" label is required prominently in the opening",
+    "aiFields": {
+      "script": "AI share in script",
+      "visual": "AI share in visuals",
+      "voice": "AI share in voiceover"
+    },
+    "generating": "Generating…",
+    "generate": "Generate filing guide",
+    "errorFallback": "Query failed, please try again later",
+    "toastInvalidInvestment": "Please enter a valid investment amount (¥10K)",
+    "tierTitle": "Tier determination",
+    "markingTitle": "AI labeling duties",
+    "materialsTitle": "Filing materials checklist",
+    "materialsDesc": "Check items off as you prepare them (stored locally only)",
+    "ctaButton": "Sign up to generate the full kit"
+  },
+  "opensource": {
+    "docTitle": "Open Source - JuHeGui",
+    "heroBadge": "Apache-2.0 with Additional Terms · Self-hostable",
+    "heroTitle": "JuHeGui Open Source",
+    "heroTagline": "A self-hostable compliance pre-check engine for AI short dramas and comic-dramas, open-sourced under Apache-2.0 with Additional Terms: deploy freely on your own infrastructure — your data never leaves your network.",
+    "licenseTitle": "License at a glance",
+    "licenseAllows": [
+      "Free to use, modify, and self-host",
+      "Private deployment (data stays entirely in your environment)"
+    ],
+    "licenseRestrictions": [
+      "Multi-tenant SaaS resale requires a commercial license",
+      "The \"JuHeGui\" name and logo may not be used as trademarks"
+    ],
+    "licenseNote": "See the LICENSE and NOTICE files in the repository for full terms.",
+    "repoTitle": "GitHub repository",
+    "repoDesc": "Source code, issues, and discussions all live on GitHub — stars and feedback welcome.",
+    "repoCta": "Visit the GitHub repo",
+    "deployTitle": "Quick deploy",
+    "deployDesc": "Spin up the full stack with Docker Compose in three steps:",
+    "deployCode": "git clone https://github.com/echo07m/sieve.git\ncd sieve\ndocker compose up -d",
+    "contributeTitle": "Contribute",
+    "contributeDesc": "Before opening issues or PRs, read the docs and contributing guide to understand the rule-library structure and how to extend the detection engine.",
+    "contributeCta": "Read the docs",
+    "roadmapTitle": "Roadmap",
+    "statusReleased": "Released",
+    "statusInProgress": "In progress",
+    "statusPlanned": "Planned",
+    "roadmapReleased": [
+      "Detection engine",
+      "Re-check loop",
+      "Batch submission"
+    ],
+    "roadmapInProgress": [
+      "Precedent library"
+    ],
+    "roadmapPlanned": [
+      "Multimodal full-cut detection"
+    ],
+    "bizTitle": "Business & Sponsorship",
+    "bizDesc": "Commercial licensing for multi-tenant SaaS operation, private delivery, and rule-base customization — contact us by email.",
+    "bizSponsorNote": "Sponsorship slots (README top banner, sponsor logo wall) are reserved and available — inquiries welcome.",
+    "bizCta": "Email us"
+  }
+}

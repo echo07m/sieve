@@ -1,0 +1,35 @@
+services:
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?请在 .env 中设置 DB_ROOT_PASSWORD}
+      MARIADB_DATABASE: juhegui
+    volumes:
+      - jhg-db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mariadb", "-uroot", "-p$$MARIADB_ROOT_PASSWORD", "-e", "SELECT 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      DATABASE_URL: mysql://root:${DB_ROOT_PASSWORD}@db:3306/juhegui
+      APP_ID: ${APP_ID:?}
+      APP_SECRET: ${APP_SECRET:?}
+      VITE_APP_ID: ${APP_ID}
+      VITE_KIMI_AUTH_URL: https://auth.kimi.com
+      KIMI_AUTH_URL: https://auth.kimi.com
+      KIMI_OPEN_URL: https://open.kimi.com
+      OWNER_UNION_ID: ${OWNER_UNION_ID:-}
+    # 数据库表结构在启动时自动迁移，规则库自动播种
+
+volumes:
+  jhg-db:

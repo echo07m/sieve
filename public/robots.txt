@@ -1,0 +1,7 @@
+# robots.txt for 剧合规
+# 允许所有爬虫抓取全部公开页面
+User-agent: *
+Allow: /
+
+# Sitemap 地址
+Sitemap: http://macrobit.com.cn/sitemap.xml
