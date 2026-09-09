@@ -43,6 +43,7 @@ import {
   Stamp,
   Upload,
   Users,
+  UsersRound,
   Webhook,
 } from "lucide-react";
 import { NotificationBell } from "@/components/NotificationBell";
@@ -65,6 +66,7 @@ const menuItems = [
   { icon: SlidersHorizontal, label: "自定义规则", path: "/custom-rules" },
   { icon: KeyRound, label: "开放API", path: "/api-keys" },
   { icon: Webhook, label: "Webhook回调", path: "/webhooks" },
+  { icon: UsersRound, label: "团队复核", path: "/team" },
   { icon: CreditCard, label: "计费与用量", path: "/billing" },
   { icon: Bell, label: "通知中心", path: "/notifications" },
 ];

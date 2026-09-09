@@ -15,6 +15,7 @@ import { publicToolsRouter } from "./publicToolsRouter";
 import { createRouter, publicQuery } from "./middleware";
 import { platformsRouter } from "./platformsRouter";
 import { policyRouter } from "./policyRouter";
+import { teamRouter } from "./teamRouter";
 import { precedentRouter } from "./precedentRouter";
 import { remediateRouter } from "./remediateRouter";
 import { rulesRouter } from "./rulesRouter";
@@ -44,6 +45,7 @@ export const appRouter = createRouter({
   remediate: remediateRouter,
   webhooks: webhooksRouter,
   policy: policyRouter,
+  team: teamRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -677,3 +677,96 @@ export const policyUpdates = mysqlTable(
 );
 
 export type PolicyUpdate = typeof policyUpdates.$inferSelect;
+
+/** 团队组织：对应广电「3名持证审核员」的自审团队要求 */
+export const organizations = mysqlTable(
+  "organizations",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 128 }).notNull(),
+    ownerId: bigint("ownerId", { mode: "number", unsigned: true }).notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  (t) => [index("organizations_ownerId_idx").on(t.ownerId)],
+);
+
+export type Organization = typeof organizations.$inferSelect;
+
+/** 组织成员：owner 负责人 / reviewer 审核员 / editor 编剧 */
+export const orgMembers = mysqlTable(
+  "org_members",
+  {
+    id: serial("id").primaryKey(),
+    orgId: bigint("orgId", { mode: "number", unsigned: true }).notNull(),
+    userId: bigint("userId", { mode: "number", unsigned: true }).notNull(),
+    role: mysqlEnum("role", ["owner", "reviewer", "editor"])
+      .notNull()
+      .default("editor"),
+    licenseNo: varchar("licenseNo", { length: 64 }).notNull().default(""), // 审核员持证编号（可选登记）
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  (t) => [
+    index("org_members_orgId_idx").on(t.orgId),
+    index("org_members_userId_idx").on(t.userId),
+  ],
+);
+
+export type OrgMember = typeof orgMembers.$inferSelect;
+
+/** 复核工单：把某次送检指派给组织内审核员复核 */
+export const reviewAssignments = mysqlTable(
+  "review_assignments",
+  {
+    id: serial("id").primaryKey(),
+    orgId: bigint("orgId", { mode: "number", unsigned: true }).notNull(),
+    submissionId: bigint("submissionId", { mode: "number", unsigned: true }).notNull(),
+    assigneeId: bigint("assigneeId", { mode: "number", unsigned: true }).notNull(),
+    assignedBy: bigint("assignedBy", { mode: "number", unsigned: true }).notNull(),
+    status: mysqlEnum("status", ["pending", "in_review", "approved", "rejected"])
+      .notNull()
+      .default("pending"),
+    note: varchar("note", { length: 500 }).notNull().default(""),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    completedAt: timestamp("completedAt"),
+  },
+  (t) => [
+    index("review_assignments_orgId_idx").on(t.orgId),
+    index("review_assignments_assigneeId_idx").on(t.assigneeId, t.status),
+  ],
+);
+
+export type ReviewAssignment = typeof reviewAssignments.$inferSelect;
+
+/** 复核批注：挂在工单上，可针对具体命中条目 */
+export const reviewAnnotations = mysqlTable(
+  "review_annotations",
+  {
+    id: serial("id").primaryKey(),
+    assignmentId: bigint("assignmentId", { mode: "number", unsigned: true }).notNull(),
+    hitId: bigint("hitId", { mode: "number", unsigned: true }),
+    authorId: bigint("authorId", { mode: "number", unsigned: true }).notNull(),
+    content: varchar("content", { length: 1000 }).notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  (t) => [index("review_annotations_assignmentId_idx").on(t.assignmentId)],
+);
+
+export type ReviewAnnotation = typeof reviewAnnotations.$inferSelect;
+
+/** 审计日志：组织内关键动作留痕（合规自查备查） */
+export const auditLogs = mysqlTable(
+  "audit_logs",
+  {
+    id: serial("id").primaryKey(),
+    orgId: bigint("orgId", { mode: "number", unsigned: true }).notNull(),
+    userId: bigint("userId", { mode: "number", unsigned: true }).notNull(),
+    action: varchar("action", { length: 64 }).notNull(), // org.create / member.add / assignment.create …
+    targetType: varchar("targetType", { length: 32 }).notNull().default(""),
+    targetId: bigint("targetId", { mode: "number", unsigned: true }),
+    detail: json("detail").$type<Record<string, unknown>>(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  (t) => [index("audit_logs_orgId_idx").on(t.orgId, t.createdAt)],
+);
+
+export type AuditLog = typeof auditLogs.$inferSelect;
