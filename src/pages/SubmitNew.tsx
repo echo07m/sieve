@@ -173,7 +173,27 @@ export default function SubmitNew() {
       toast.error("文件过大（上限 4MB，约80集剧本）");
       return;
     }
-    const text = await f.text();
+    const raw = await f.text();
+    let text = raw;
+    // Sieve Script JSON 标准格式：{episodes:[{episodeNo,title,content}]}（编剧工具/资产系统导出）
+    if (f.name.toLowerCase().endsWith(".json")) {
+      try {
+        const data = JSON.parse(raw) as {
+          episodes?: { episodeNo: number; title?: string; content?: string }[];
+        };
+        if (!Array.isArray(data.episodes) || data.episodes.length === 0) {
+          toast.error("JSON 须为 Sieve Script 标准格式：{episodes:[{episodeNo,title,content}]}");
+          return;
+        }
+        text = data.episodes
+          .map((e) => `第${e.episodeNo}集 ${e.title ?? ""}\n${e.content ?? ""}`)
+          .join("\n\n");
+        toast.success(`已按 Sieve Script JSON 解析 ${data.episodes.length} 集`);
+      } catch {
+        toast.error("JSON 文件解析失败");
+        return;
+      }
+    }
     setScriptText(text);
     if (!workTitle) {
       const m = text.match(/[《「]([^》」]{2,40})[》」]/);
@@ -342,7 +362,7 @@ export default function SubmitNew() {
           <CardHeader>
             <CardTitle className="text-lg">剧本文本</CardTitle>
             <CardDescription>
-              支持 txt/md 文本文件上传或直接粘贴。建议按「第X集」分集以获得逐集定位。
+              支持 txt/md/json（Sieve Script 标准格式）文件上传或直接粘贴。建议按「第X集」分集以获得逐集定位。
               当前共 {scriptText.length.toLocaleString()} 字
             </CardDescription>
           </CardHeader>
@@ -357,7 +377,7 @@ export default function SubmitNew() {
               <input
                 ref={fileRef}
                 type="file"
-                accept=".txt,.md,.text"
+                accept=".txt,.md,.text,.json"
                 className="hidden"
                 onChange={(e) => {
                   const f = e.target.files?.[0];

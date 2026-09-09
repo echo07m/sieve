@@ -333,6 +333,131 @@ export const submissionsRouter = createRouter({
       return { filename: `合规预检报告-${safeTitle}-${report.reportNo}.docx`, base64: buf.toString("base64") };
     }),
 
+  /**
+   * 导出 SARIF 2.1.0 报告（工具链标准静态分析格式）。
+   * 可直接上传 GitHub Code Scanning（codeql-action/upload-sarif）或导入支持 SARIF 的 IDE/平台。
+   */
+  exportSarif: authedQuery
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const submission = await findSubmissionById(input.id, ctx.user.id);
+      if (!submission) throw new TRPCError({ code: "NOT_FOUND", message: "送检记录不存在" });
+      const [hits, report] = await Promise.all([
+        findHitsBySubmission(submission.id),
+        findReportBySubmission(submission.id),
+      ]);
+      if (!report) throw new TRPCError({ code: "BAD_REQUEST", message: "报告尚未生成，无法导出" });
+
+      const levelMap: Record<string, string> = { block: "error", high: "warning", notice: "note" };
+      const uniqueRules = new Map<string, { code: string; name: string; severity: string; basis: string }>();
+      for (const h of hits) {
+        if (!uniqueRules.has(h.ruleCode)) {
+          uniqueRules.set(h.ruleCode, { code: h.ruleCode, name: h.ruleName, severity: h.severity, basis: h.basis });
+        }
+      }
+      const sarif = {
+        $schema: "https://json.schemastore.org/sarif-2.1.0.json",
+        version: "2.1.0",
+        runs: [
+          {
+            tool: {
+              driver: {
+                name: "Sieve 剧合规",
+                version: report.ruleVersion ?? "unknown",
+                informationUri: "https://github.com/echo07m/sieve",
+                rules: Array.from(uniqueRules.values()).map((r) => ({
+                  id: r.code,
+                  name: r.name,
+                  shortDescription: { text: r.name },
+                  fullDescription: { text: r.basis.slice(0, 500) },
+                  defaultConfiguration: { level: levelMap[r.severity] ?? "warning" },
+                  properties: { severity: r.severity },
+                })),
+              },
+            },
+            results: hits.map((h) => ({
+              ruleId: h.ruleCode,
+              level: levelMap[h.severity] ?? "warning",
+              message: {
+                text: `[第${h.episodeNo}集 ${h.location}] ${h.ruleName}：${(h.spanText ?? "").slice(0, 100)}。整改建议：${(h.remediation ?? "").slice(0, 200)}`,
+              },
+              locations: [
+                {
+                  physicalLocation: {
+                    artifactLocation: { uri: `${submission.workTitle}.txt`, uriBaseId: "SRCROOT" },
+                    region: { startLine: h.episodeNo },
+                  },
+                  logicalLocations: [{ name: `episode-${h.episodeNo}`, kind: "episode" }],
+                },
+              ],
+              partialFingerprints: {
+                "sieve/reportNo": report.reportNo,
+                "sieve/confidence": String(h.confidence),
+              },
+            })),
+            properties: {
+              "sieve/reportNo": report.reportNo,
+              "sieve/verdict": report.verdict,
+              "sieve/reportHash": report.contentHash,
+              "sieve/disclaimer": "本报告为上线前预检参考，不构成过审保证，最终以平台与监管审核为准。",
+            },
+          },
+        ],
+      };
+      const safeTitle = submission.workTitle.replace(/[\\/:*?"<>|]/g, "_").slice(0, 40);
+      return {
+        filename: `sieve-precheck-${safeTitle}-${report.reportNo}.sarif`,
+        base64: Buffer.from(JSON.stringify(sarif, null, 2), "utf-8").toString("base64"),
+      };
+    }),
+
+  /**
+   * 导出 JUnit XML（CI 测试报告标准格式）。
+   * block/high 命中记为 failure，可直接被 Jenkins/GitLab CI/Azure DevOps 等解析展示。
+   */
+  exportJunit: authedQuery
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const submission = await findSubmissionById(input.id, ctx.user.id);
+      if (!submission) throw new TRPCError({ code: "NOT_FOUND", message: "送检记录不存在" });
+      const [hits, report] = await Promise.all([
+        findHitsBySubmission(submission.id),
+        findReportBySubmission(submission.id),
+      ]);
+      if (!report) throw new TRPCError({ code: "BAD_REQUEST", message: "报告尚未生成，无法导出" });
+
+      const esc = (s: string) =>
+        s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;").replace(/'/g, "&apos;")
+         // XML 1.0 非法控制字符
+         .replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, "");
+      const failures = hits.filter((h) => h.severity === "block" || h.severity === "high").length;
+      const cases = hits.map((h) => {
+        const name = `${h.ruleCode} @ 第${h.episodeNo}集 ${h.location}`.slice(0, 200);
+        const body = `${h.ruleName}\n命中片段：${h.spanText}\n依据条文：${h.basis}\n整改建议：${h.remediation}`;
+        const fail = h.severity === "block" || h.severity === "high";
+        return fail
+          ? `  <testcase classname="${esc(h.category)}" name="${esc(name)}">\n    <failure message="${esc(h.ruleName)}" type="${h.severity}">${esc(body)}</failure>\n  </testcase>`
+          : `  <testcase classname="${esc(h.category)}" name="${esc(name)}"/>`;
+      });
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="sieve-precheck" tests="${hits.length}" failures="${failures}" errors="0" timestamp="${report.generatedAt?.toISOString?.() ?? new Date().toISOString()}" hostname="sieve">
+  <properties>
+    <property name="workTitle" value="${esc(submission.workTitle)}"/>
+    <property name="reportNo" value="${esc(report.reportNo)}"/>
+    <property name="verdict" value="${esc(report.verdict)}"/>
+    <property name="ruleVersion" value="${esc(report.ruleVersion ?? "")}"/>
+  </properties>
+${cases.join("\n")}
+</testsuite>
+`;
+      const safeTitle = submission.workTitle.replace(/[\\/:*?"<>|]/g, "_").slice(0, 40);
+      return {
+        filename: `sieve-precheck-${safeTitle}-${report.reportNo}.xml`,
+        base64: Buffer.from(xml, "utf-8").toString("base64"),
+      };
+    }),
+
   /** 整改留痕：标记命中采纳/不采纳 */
   reviewHit: authedQuery
     .input(

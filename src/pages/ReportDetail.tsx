@@ -24,7 +24,9 @@ import {
   ArrowRight,
   CheckCircle2,
   ChevronLeft,
+  FileCode2,
   FileDown,
+  FileJson,
   FileText,
   Fingerprint,
   GitCompareArrows,
@@ -75,6 +77,26 @@ export default function ReportDetail() {
       URL.revokeObjectURL(url);
       toast.success("Word 报告已导出");
     },
+    onError: (e) => toast.error(e.message || "导出失败"),
+  });
+
+  /** 导出工具链标准格式（SARIF/JUnit，base64 文本返回） */
+  const downloadBase64Text = (res: { filename: string; base64: string }, mime: string, label: string) => {
+    const blob = new Blob([atob(res.base64)], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = res.filename;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success(`${label} 已导出`);
+  };
+  const exportSarif = trpc.submissions.exportSarif.useMutation({
+    onSuccess: (res) => downloadBase64Text(res, "application/sarif+json", "SARIF 报告"),
+    onError: (e) => toast.error(e.message || "导出失败"),
+  });
+  const exportJunit = trpc.submissions.exportJunit.useMutation({
+    onSuccess: (res) => downloadBase64Text(res, "application/xml", "JUnit 报告"),
     onError: (e) => toast.error(e.message || "导出失败"),
   });
 
@@ -166,6 +188,22 @@ export default function ReportDetail() {
                 <FileText className="mr-2 h-4 w-4" />
               )}
               {exportWord.isPending ? "导出中…" : "导出 Word"}
+            </Button>
+            <Button
+              variant="outline"
+              disabled={exportSarif.isPending || !report}
+              title="静态分析标准格式，可上传 GitHub Code Scanning"
+              onClick={() => exportSarif.mutate({ id: submissionId })}
+            >
+              <FileJson className="mr-2 h-4 w-4" /> SARIF
+            </Button>
+            <Button
+              variant="outline"
+              disabled={exportJunit.isPending || !report}
+              title="CI 测试报告标准格式，可被 Jenkins/GitLab CI 解析"
+              onClick={() => exportJunit.mutate({ id: submissionId })}
+            >
+              <FileCode2 className="mr-2 h-4 w-4" /> JUnit
             </Button>
           </div>
         </div>

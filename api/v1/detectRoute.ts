@@ -13,6 +13,7 @@ import { runDetection } from "../engine/orchestrator";
 import { consumeQuota, refundQuota } from "../queries/billing";
 import { getActiveRules, getLatestRuleVersion } from "../queries/compliance";
 import { getDb } from "../queries/connection";
+import { registerOpenApiRoute } from "./openapi";
 import {
   createDetectTask,
   getDetectTaskByNo,
@@ -261,6 +262,9 @@ export function registerV1Routes(app: Hono<any>): void {
       ...(task.status === "failed" ? { error: task.error } : {}),
     });
   });
+
+  // OpenAPI 规范端点（工具链契约）
+  registerOpenApiRoute(app);
 
   // Webhook 投递定时扫描器（模块注册时启动一次）
   startDeliveryScanner();
