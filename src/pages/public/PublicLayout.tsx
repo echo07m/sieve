@@ -29,6 +29,7 @@ export default function PublicLayout() {
     { to: "/tools/filing-wizard", label: t("nav.filingWizard") },
     { to: "/docs", label: t("nav.docs") },
     { to: "/faq", label: t("nav.faq") },
+    { to: "/cases", label: t("nav.cases") },
     { to: "/opensource", label: t("nav.opensource") },
   ];
 

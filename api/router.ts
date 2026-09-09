@@ -14,6 +14,8 @@ import { notificationsRouter } from "./notificationsRouter";
 import { publicToolsRouter } from "./publicToolsRouter";
 import { createRouter, publicQuery } from "./middleware";
 import { platformsRouter } from "./platformsRouter";
+import { precedentRouter } from "./precedentRouter";
+import { remediateRouter } from "./remediateRouter";
 import { rulesRouter } from "./rulesRouter";
 import { submissionsRouter } from "./submissionsRouter";
 
@@ -36,6 +38,8 @@ export const appRouter = createRouter({
   orders: ordersRouter,
   notifications: notificationsRouter,
   tools: publicToolsRouter,
+  precedents: precedentRouter,
+  remediate: remediateRouter,
 });
 
 export type AppRouter = typeof appRouter;

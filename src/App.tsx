@@ -34,6 +34,8 @@ import Terms from "./pages/public/Terms"
 import Privacy from "./pages/public/Privacy"
 import TitleCheck from "./pages/public/TitleCheck"
 import FilingWizard from "./pages/public/FilingWizard"
+import AdminCases from "./pages/admin/AdminCases";
+import Cases from "./pages/public/Cases";
 import OpenSource from "./pages/public/OpenSource"
 
 export default function App() {
@@ -64,6 +66,7 @@ export default function App() {
       <Route path="/admin/platforms" element={<AdminPlatforms />} />
       <Route path="/admin/orders" element={<AdminOrders />} />
       <Route path="/admin/leads" element={<LeadsAdmin />} />
+      <Route path="/admin/cases" element={<AdminCases />} />
       <Route element={<PublicLayout />}>
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/features" element={<Features />} />
@@ -71,6 +74,7 @@ export default function App() {
         <Route path="/faq" element={<FaqPage />} />
         <Route path="/tools/title-check" element={<TitleCheck />} />
         <Route path="/tools/filing-wizard" element={<FilingWizard />} />
+        <Route path="/cases" element={<Cases />} />
         <Route path="/opensource" element={<OpenSource />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />

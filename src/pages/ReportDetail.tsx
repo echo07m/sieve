@@ -11,6 +11,12 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { CATEGORIES, PLATFORMS, SEVERITIES, VERDICTS, WORK_TYPES } from "@contracts/constants";
 import { trpc, type RouterOutputs } from "@/providers/trpc";
 import {
@@ -22,10 +28,12 @@ import {
   FileText,
   Fingerprint,
   GitCompareArrows,
+  Landmark,
   Loader2,
   RefreshCw,
   ShieldAlert,
   ShieldCheck,
+  Wand2,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -78,6 +86,22 @@ export default function ReportDetail() {
         (catFilter === "all" || h.category === catFilter),
     );
   }, [data?.hits, sevFilter, catFilter]);
+
+  /** 整改助手：当前选中的命中 */
+  const [assistHit, setAssistHit] = useState<{ id: number } | null>(null);
+  const remediate = trpc.remediate.suggest.useMutation({
+    onError: (e) => toast.error(e.message || "获取整改建议失败"),
+  });
+
+  /** 判例佐证：按本报告命中的全部规则 code 拉取相关判例 */
+  const ruleCodes = useMemo(
+    () => Array.from(new Set((data?.hits ?? []).map((h) => h.ruleCode))).slice(0, 20),
+    [data?.hits],
+  );
+  const precedents = trpc.precedents.byRuleCodes.useQuery(
+    { codes: ruleCodes },
+    { enabled: ruleCodes.length > 0 },
+  );
 
   if (isLoading) {
     return (
@@ -310,6 +334,17 @@ export default function ReportDetail() {
                     {h.remediation}
                   </div>
                   <div className="flex items-center gap-2 print:hidden">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-7 text-xs border-amber-300 text-amber-800 hover:bg-amber-50"
+                      onClick={() => {
+                        setAssistHit({ id: h.id });
+                        remediate.mutate({ hitId: h.id });
+                      }}
+                    >
+                      <Wand2 className="h-3 w-3 mr-1" /> 整改助手
+                    </Button>
                     {h.reviewStatus === "open" ? (
                       <>
                         <Button
@@ -343,6 +378,123 @@ export default function ReportDetail() {
 
         {/* 复诊对比：同作品其他已完成记录 vs 当前报告 */}
         <RecheckCompare submissionId={submissionId} />
+
+        {/* 判例佐证：命中规则关联的真实判例 */}
+        {(precedents.data?.length ?? 0) > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Landmark className="h-5 w-5 text-amber-800" />
+                相关判例佐证（{precedents.data!.length}）
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {precedents.data!.map((c) => (
+                <div key={c.id} className="border border-stone-200 rounded-lg p-4">
+                  <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                    <span className="font-medium text-sm">{c.title}</span>
+                    {c.platform && (
+                      <Badge variant="outline" className="text-xs">{c.platform}</Badge>
+                    )}
+                    {c.occurredAt && (
+                      <span className="text-xs text-muted-foreground ml-auto">
+                        {new Date(c.occurredAt).toLocaleDateString()}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {c.summary}
+                  </p>
+                  {c.outcome && (
+                    <p className="text-xs text-muted-foreground mt-1.5">
+                      <span className="font-medium text-slate-600">处置结果：</span>
+                      {c.outcome}
+                    </p>
+                  )}
+                  {c.sourceUrl && (
+                    <a
+                      href={c.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block text-xs text-amber-800 hover:underline mt-1.5"
+                    >
+                      来源：{c.source} ↗
+                    </a>
+                  )}
+                </div>
+              ))}
+              <p className="text-xs text-muted-foreground">
+                判例整理自公开报道与官方公告，仅供合规参考。更多见
+                <a href="/cases" className="text-amber-800 hover:underline ml-1">判例库</a>。
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* 整改助手对话框 */}
+        <Dialog open={assistHit !== null} onOpenChange={(o) => !o && setAssistHit(null)}>
+          <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Wand2 className="h-5 w-5 text-amber-800" /> 智能整改助手
+              </DialogTitle>
+            </DialogHeader>
+            {remediate.isPending ? (
+              <div className="flex items-center justify-center py-10 text-muted-foreground gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" /> 正在生成整改建议…
+              </div>
+            ) : remediate.data ? (
+              <div className="space-y-4">
+                <blockquote className="border-l-2 pl-3 text-sm text-slate-700 bg-slate-50 py-2 rounded-r">
+                  {remediate.data.spanText}
+                </blockquote>
+                <div className="text-sm">
+                  <span className="font-medium">整改方向：</span>
+                  {remediate.data.direction}
+                </div>
+                <div>
+                  <p className="text-sm font-medium mb-2">可选处置方案：</p>
+                  <div className="space-y-2.5">
+                    {remediate.data.suggestions.map((s, i) => (
+                      <div key={i} className="border border-stone-200 rounded-lg p-3">
+                        <Badge variant="outline" className="text-xs mb-2">
+                          {s.kind === "rewrite" ? "AI 改写" : s.kind === "delete" ? "删除" : "替换/调整"}
+                        </Badge>
+                        <p className="text-sm leading-relaxed">{s.text}</p>
+                        <p className="text-xs text-muted-foreground mt-1.5">{s.rationale}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {remediate.data.tips.length > 0 && (
+                  <div>
+                    <p className="text-sm font-medium mb-1.5">整改要点：</p>
+                    <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
+                      {remediate.data.tips.map((tip, i) => (
+                        <li key={i}>{tip}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <Button
+                  className="w-full bg-amber-800 hover:bg-amber-900 text-white"
+                  onClick={() => navigate(`/submit?recheck=${submissionId}`)}
+                >
+                  修改剧本后去复诊 <ArrowRight className="h-4 w-4 ml-1" />
+                </Button>
+                {!remediate.data.llmEnabled && (
+                  <p className="text-xs text-muted-foreground text-center">
+                    当前为规则模板建议；配置 LLM_API_KEY 后可获得 AI 个性化改写
+                  </p>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground py-6 text-center">
+                未能获取建议，请稍后重试
+              </p>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </AuthLayout>
   );

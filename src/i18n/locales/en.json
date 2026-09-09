@@ -9,7 +9,8 @@
     "opensource": "Open Source",
     "login": "Sign in",
     "dashboard": "Dashboard",
-    "menuLabel": "Open navigation menu"
+    "menuLabel": "Open navigation menu",
+    "cases": "Cases"
   },
   "footer": {
     "tagline": "Pre-launch compliance pre-check for AI short dramas & comic-dramas",
@@ -547,5 +548,28 @@
     "bizDesc": "Commercial licensing for multi-tenant SaaS operation, private delivery, and rule-base customization — contact us by email.",
     "bizSponsorNote": "Sponsorship slots (README top banner, sponsor logo wall) are reserved and available — inquiries welcome.",
     "bizCta": "Email us"
+  },
+  "cases": {
+    "docTitle": "Case Precedents - Sieve",
+    "heroTitle": "Case Precedents",
+    "heroDesc": "Real cases from platform enforcement, judicial rulings, regulatory notices and rights-protection events, all from public sources. When a report hits a related rule, precedents are attached as supporting evidence.",
+    "searchPlaceholder": "Search title / summary / violation",
+    "filterPlatform": "Platform",
+    "allPlatforms": "All platforms",
+    "filterType": "Case type",
+    "allTypes": "All types",
+    "type": {
+      "platform_action": "Platform Action",
+      "judicial": "Judicial",
+      "regulatory": "Regulatory",
+      "rights_protection": "Rights Protection"
+    },
+    "violationLabel": "Violation",
+    "outcomeLabel": "Outcome",
+    "sourceLabel": "Source",
+    "empty": "No matching precedents",
+    "prevPage": "Prev",
+    "nextPage": "Next",
+    "disclaimer": "All precedents are compiled from public reports and official announcements, for compliance reference only and do not constitute legal advice."
   }
 }

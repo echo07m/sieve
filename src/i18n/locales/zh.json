@@ -9,7 +9,8 @@
     "opensource": "开源",
     "login": "登录",
     "dashboard": "进入工作台",
-    "menuLabel": "打开导航菜单"
+    "menuLabel": "打开导航菜单",
+    "cases": "判例库"
   },
   "footer": {
     "tagline": "AI短剧/漫剧上线前合规预检",
@@ -547,5 +548,28 @@
     "bizDesc": "多租户 SaaS 运营授权、私有化交付、规则库定制等商业合作，欢迎邮件洽谈。",
     "bizSponsorNote": "README 顶部冠名位、赞助商 Logo 墙等广告位长期预留，虚位以待，欢迎垂询。",
     "bizCta": "发送邮件"
+  },
+  "cases": {
+    "docTitle": "判例库 - 剧合规",
+    "heroTitle": "判例库",
+    "heroDesc": "收录平台处置、司法判例、监管通报与维权事件中的真实案例，均来自公开渠道。检测报告中命中相关规则时，可引用判例作为佐证参考。",
+    "searchPlaceholder": "搜索案例标题 / 内容 / 违规点",
+    "filterPlatform": "平台",
+    "allPlatforms": "全部平台",
+    "filterType": "案例类型",
+    "allTypes": "全部类型",
+    "type": {
+      "platform_action": "平台处置",
+      "judicial": "司法判例",
+      "regulatory": "监管通报",
+      "rights_protection": "维权事件"
+    },
+    "violationLabel": "违规点",
+    "outcomeLabel": "处置结果",
+    "sourceLabel": "来源",
+    "empty": "未找到匹配的判例",
+    "prevPage": "上一页",
+    "nextPage": "下一页",
+    "disclaimer": "判例信息均整理自公开报道与官方公告，仅供合规参考，不构成法律意见。"
   }
 }

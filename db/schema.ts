@@ -538,3 +538,38 @@ export const notifications = mysqlTable("notifications", {
 );
 
 export type Notification = typeof notifications.$inferSelect;
+
+// ============================================================
+// 判例库：平台驳回/下架/维权真实案例，为检测报告提供判例佐证
+// ============================================================
+
+/**
+ * 判例：收录平台处置、司法判决、监管通报中的真实案例。
+ * relatedRuleCodes 关联规则库 ruleCode，命中该规则时报告附判例佐证。
+ */
+export const precedentCases = mysqlTable(
+  "precedent_cases",
+  {
+    id: serial("id").primaryKey(),
+    title: varchar("title", { length: 128 }).notNull(),
+    platform: varchar("platform", { length: 32 }).notNull().default(""), // 红果/抖音/快手/微信/司法/监管
+    caseType: mysqlEnum("caseType", [
+      "platform_action", // 平台处置（下架/限流/封号）
+      "judicial", // 司法判例
+      "regulatory", // 监管通报/约谈
+      "rights_protection", // 维权事件
+    ]).notNull(),
+    summary: varchar("summary", { length: 1000 }).notNull(),
+    violation: varchar("violation", { length: 200 }).notNull().default(""), // 违规点概述
+    outcome: varchar("outcome", { length: 300 }).notNull().default(""), // 处置结果
+    source: varchar("source", { length: 128 }).notNull().default(""), // 信息来源（媒体/公告名）
+    sourceUrl: varchar("sourceUrl", { length: 300 }).notNull().default(""),
+    relatedRuleCodes: json("relatedRuleCodes").$type<string[]>().notNull(), // 关联规则 code 列表
+    occurredAt: timestamp("occurredAt"),
+    isActive: boolean("isActive").notNull().default(true),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  (t) => [index("precedent_cases_type_idx").on(t.caseType, t.isActive)],
+);
+
+export type PrecedentCase = typeof precedentCases.$inferSelect;

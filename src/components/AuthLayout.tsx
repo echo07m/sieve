@@ -35,6 +35,7 @@ import {
   LogOut,
   PanelLeft,
   ScanSearch,
+  Landmark,
   Send,
   ShieldCheck,
   SlidersHorizontal,
@@ -73,6 +74,7 @@ const adminMenuItems = [
   { icon: ListChecks, label: "平台配置", path: "/admin/platforms" },
   { icon: CreditCard, label: "订单收款", path: "/admin/orders" },
   { icon: Send, label: "线索管理", path: "/admin/leads" },
+  { icon: Landmark, label: "判例库管理", path: "/admin/cases" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
