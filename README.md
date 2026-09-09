@@ -28,6 +28,7 @@
 - **规则运营**：规则启停热更新、版本快照发布与一键回滚。
 - **免费获客工具**：片名快检、备案导航（免登录）。
 - **开放 API**：REST 检测端点（`Authorization: Bearer jhg_…`），支持接入自有生产管线。
+- **工具链衔接**：OpenAPI 3.0 契约、SARIF 2.1.0 / JUnit XML 报告导出、sieve-cli 命令行（CI 门禁退出码）、Sieve Script JSON 输入标准、Webhook 回调，详见 [工具链集成指南](docs/工具链集成.md)。
 - **商业化闭环**：订阅额度、留资线索、订单收款登记、后台管理（用户/规则/平台/订单/线索/运营总览）。
 
 ## 架构
@@ -151,6 +152,7 @@ npm run dev                    # 开发（前后端热更新）
 - Filing guidance wizard (investment-based tiering per the 2026-01 standard) and auto-generated filing material packages
 - GB 45438-2025 AI-content labeling checklist and validation
 - Free tools (no login): title check & filing wizard; batch submissions; REST API
+- Toolchain-ready: OpenAPI 3.0 contract, SARIF 2.1.0 / JUnit XML exports, sieve-cli with CI gate exit codes, Sieve Script JSON input, signed webhooks
 - Full commercialization back-office: subscriptions, leads, orders, admin console
 
 **Quick start**: `cp .env.example .env` → fill in Kimi OAuth credentials → `./deploy.sh` → open http://localhost:3000.
