@@ -1,0 +1,73 @@
+name: "Sieve 剧本合规预检"
+description: >-
+  调用剧合规（Sieve）开放 API 对剧本做上线前合规预检，
+  按严重级阈值设置 CI 门禁（阻断/高危/提示），支持 SARIF 输出对接 Code Scanning。
+author: "Sieve 剧合规"
+branding:
+  icon: "shield"
+  color: "orange"
+
+inputs:
+  api-key:
+    description: "Sieve API Key（jhg_ 前缀），建议存于仓库 Secrets"
+    required: true
+  endpoint:
+    description: "Sieve 服务地址（自托管或 SaaS）"
+    required: false
+    default: "http://macrobit.com.cn"
+  files:
+    description: "剧本文件 glob（如 scripts/*.txt 或 scripts/*.json），多个用空格分隔"
+    required: true
+  platform:
+    description: "目标平台口径：universal | hongguo | fanqie | kuaishou | wechat"
+    required: false
+    default: "universal"
+  fail-on:
+    description: "门禁阈值：block | high | notice | never（命中≥该级别则失败）"
+    required: false
+    default: "block"
+  async:
+    description: "大剧本走异步接口并轮询（true/false）"
+    required: false
+    default: "false"
+  sarif-output:
+    description: "SARIF 输出目录（非空则每个剧本生成 .sarif，可接 upload-sarif）"
+    required: false
+    default: ""
+
+outputs:
+  breached:
+    description: "是否存在 ≥ 阈值的命中（true/false）"
+    value: ${{ steps.precheck.outputs.breached }}
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Sieve 合规预检
+      id: precheck
+      shell: bash
+      env:
+        SIEVE_API_KEY: ${{ inputs.api-key }}
+      run: |
+        set -uo pipefail
+        BREACHED=false
+        for f in ${{ inputs.files }}; do
+          [ -e "$f" ] || continue
+          echo "══ 送检：$f"
+          ARGS=(--file "$f" --endpoint "${{ inputs.endpoint }}" --platform "${{ inputs.platform }}" --fail-on "${{ inputs.fail-on }}")
+          [ "${{ inputs.async }}" = "true" ] && ARGS+=(--async)
+          if [ -n "${{ inputs.sarif-output }}" ]; then
+            mkdir -p "${{ inputs.sarif-output }}"
+            ARGS+=(--format sarif --output "${{ inputs.sarif-output }}/$(basename "$f").sarif")
+          fi
+          if ! node "${{ github.action_path }}/cli/sieve-cli.mjs" "${ARGS[@]}"; then
+            CODE=$?
+            if [ "$CODE" = "2" ]; then BREACHED=true; else exit "$CODE"; fi
+          fi
+        done
+        echo "breached=$BREACHED" >> "$GITHUB_OUTPUT"
+        [ "$BREACHED" = "true" ] && [ "${{ inputs.fail-on }}" != "never" ] && exit 2 || exit 0

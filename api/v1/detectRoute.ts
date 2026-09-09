@@ -10,7 +10,7 @@ import { z } from "zod";
 import { apiKeys, customRules } from "@db/schema";
 import { REPORT_DISCLAIMER } from "@contracts/constants";
 import { runDetection } from "../engine/orchestrator";
-import { consumeQuota, refundQuota } from "../queries/billing";
+import { consumeQuota, getOrCreateSubscription, refundQuota } from "../queries/billing";
 import { getActiveRules, getLatestRuleVersion } from "../queries/compliance";
 import { getDb } from "../queries/connection";
 import { registerOpenApiRoute } from "./openapi";
@@ -260,6 +260,38 @@ export function registerV1Routes(app: Hono<any>): void {
       finishedAt: task.finishedAt,
       ...(task.status === "done" ? { result: task.result } : {}),
       ...(task.status === "failed" ? { error: task.error } : {}),
+    });
+  });
+
+  // ============ 用量查询：GET /api/v1/usage ============
+  app.get("/api/v1/usage", async (c) => {
+    const authHeader = c.req.header("Authorization") ?? "";
+    const token = /^Bearer\s+(.+)$/i.exec(authHeader)?.[1]?.trim() ?? "";
+    if (!API_KEY_PATTERN.test(token)) {
+      return c.json({ error: "缺少或格式错误的 API Key" }, 401);
+    }
+    const keyHash = createHash("sha256").update(token).digest("hex");
+    const db = getDb();
+    const [keyRow] = await db
+      .select({ userId: apiKeys.userId })
+      .from(apiKeys)
+      .where(eq(apiKeys.keyHash, keyHash))
+      .limit(1);
+    if (!keyRow) {
+      return c.json({ error: "API Key 无效或已吊销" }, 401);
+    }
+    const sub = await getOrCreateSubscription(keyRow.userId);
+    const unlimited = sub.quotaTotal === -1;
+    const expired = Boolean(sub.expiresAt && sub.expiresAt.getTime() < Date.now());
+    return c.json({
+      planCode: sub.planCode,
+      planName: sub.planName,
+      status: expired ? "expired" : sub.status,
+      unlimited,
+      quotaTotal: unlimited ? null : sub.quotaTotal,
+      quotaUsed: sub.quotaUsed,
+      quotaRemaining: unlimited ? null : Math.max(0, sub.quotaTotal - sub.quotaUsed),
+      expiresAt: sub.expiresAt,
     });
   });
 

@@ -165,6 +165,36 @@ export function buildOpenApiSpec(baseUrl = "") {
           },
         },
       },
+      "/api/v1/usage": {
+        get: {
+          operationId: "getUsage",
+          summary: "查询当前订阅额度用量（管线水位监控）",
+          security: [{ bearerAuth: [] }],
+          responses: {
+            "200": {
+              description: "用量信息",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      planCode: { type: "string" },
+                      planName: { type: "string" },
+                      status: { type: "string" },
+                      unlimited: { type: "boolean", description: "企业年框不限量" },
+                      quotaTotal: { type: "integer", nullable: true },
+                      quotaUsed: { type: "integer" },
+                      quotaRemaining: { type: "integer", nullable: true },
+                      expiresAt: { type: "string", format: "date-time", nullable: true },
+                    },
+                  },
+                },
+              },
+            },
+            "401": { description: "API Key 无效", content: { "application/json": { schema: errorSchema } } },
+          },
+        },
+      },
     },
     components: {
       securitySchemes: {
