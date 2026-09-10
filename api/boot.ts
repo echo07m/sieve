@@ -9,6 +9,7 @@ import { createOAuthCallbackHandler } from "./kimi/auth";
 import { Paths } from "@contracts/constants";
 import { ensureSchema } from "./auto-migrate";
 import { registerV1Routes } from "./v1/detectRoute";
+import { registerGithubAuthRoutes } from "./githubAuth";
 
 void ensureSchema();
 
@@ -17,6 +18,7 @@ const app = new Hono<{ Bindings: HttpBindings }>();
 app.use(bodyLimit({ maxSize: 50 * 1024 * 1024 }));
 app.get(Paths.oauthCallback, createOAuthCallbackHandler());
 registerV1Routes(app);
+registerGithubAuthRoutes(app);
 app.use("/api/trpc/*", async (c) => {
   return fetchRequestHandler({
     endpoint: "/api/trpc",

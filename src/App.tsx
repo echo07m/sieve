@@ -36,6 +36,7 @@ import TitleCheck from "./pages/public/TitleCheck"
 import FilingWizard from "./pages/public/FilingWizard"
 import AdminCases from "./pages/admin/AdminCases";
 import AdminPolicy from "./pages/admin/AdminPolicy";
+import AdminAuthSettings from "./pages/admin/AdminAuthSettings";
 import Webhooks from "./pages/Webhooks";
 import Team from "./pages/Team";
 import Storyboard from "./pages/Storyboard";
@@ -75,6 +76,7 @@ export default function App() {
       <Route path="/admin/leads" element={<LeadsAdmin />} />
       <Route path="/admin/cases" element={<AdminCases />} />
       <Route path="/admin/policy" element={<AdminPolicy />} />
+      <Route path="/admin/auth" element={<AdminAuthSettings />} />
       <Route element={<PublicLayout />}>
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/features" element={<Features />} />

@@ -19,6 +19,9 @@ export const users = mysqlTable("users", {
   unionId: varchar("unionId", { length: 255 }).notNull().unique(),
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 320 }),
+  username: varchar("username", { length: 64 }).unique(), // 用户名密码登录（可空：Kimi/GitHub 用户无用户名）
+  passwordHash: varchar("passwordHash", { length: 255 }), // scrypt$N$r$p$salt$hash
+  githubId: varchar("githubId", { length: 32 }).unique(), // GitHub OAuth 绑定
   avatar: text("avatar"),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -790,3 +793,18 @@ export const storyboards = mysqlTable(
 );
 
 export type StoryboardRow = typeof storyboards.$inferSelect;
+
+/** 第三方登录提供方配置（GitHub OAuth 等，管理员在后台配置） */
+export const authProviders = mysqlTable("auth_providers", {
+  id: serial("id").primaryKey(),
+  provider: varchar("provider", { length: 32 }).notNull().unique(), // github
+  clientId: varchar("clientId", { length: 128 }).notNull().default(""),
+  clientSecret: varchar("clientSecret", { length: 128 }).notNull().default(""),
+  enabled: boolean("enabled").notNull().default(false),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => new Date()),
+});
+
+export type AuthProvider = typeof authProviders.$inferSelect;

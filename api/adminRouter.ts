@@ -93,11 +93,11 @@ export const adminRouter = createRouter({
   /** 用户管理：用户列表 + 当前订阅（左连接取最新一条 active 订阅） */
   users: adminQuery.query(async () => {
     const db = getDb();
-    const allUsers = await db
+    const allUsers = (await db
       .select()
       .from(users)
       .orderBy(desc(users.id))
-      .limit(500);
+      .limit(500)).map(({ passwordHash: _ph, ...u }) => u); // 密码哈希不下发
     const subs = await db
       .select()
       .from(subscriptions)

@@ -2,6 +2,7 @@ import { adminRouter } from "./adminRouter";
 import { analyticsRouter } from "./analyticsRouter";
 import { apiKeysRouter } from "./apiKeysRouter";
 import { authRouter } from "./auth-router";
+import { authLocalRouter } from "./authLocalRouter";
 import { billingRouter } from "./billingRouter";
 import { copyrightRouter } from "./copyrightRouter";
 import { customRulesRouter } from "./customRulesRouter";
@@ -26,6 +27,7 @@ import { webhooksRouter } from "./webhooksRouter";
 export const appRouter = createRouter({
   ping: publicQuery.query(() => ({ ok: true, ts: Date.now() })),
   auth: authRouter,
+  authLocal: authLocalRouter,
   rules: rulesRouter,
   submissions: submissionsRouter,
   filing: filingRouter,

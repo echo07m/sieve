@@ -83,6 +83,7 @@ const adminMenuItems = [
   { icon: Send, label: "线索管理", path: "/admin/leads" },
   { icon: Landmark, label: "判例库管理", path: "/admin/cases" },
   { icon: Radar, label: "政策雷达", path: "/admin/policy" },
+  { icon: KeyRound, label: "登录方式", path: "/admin/auth" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
