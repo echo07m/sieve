@@ -38,6 +38,7 @@ import AdminCases from "./pages/admin/AdminCases";
 import AdminPolicy from "./pages/admin/AdminPolicy";
 import Webhooks from "./pages/Webhooks";
 import Team from "./pages/Team";
+import Storyboard from "./pages/Storyboard";
 import Cases from "./pages/public/Cases";
 import OpenSource from "./pages/public/OpenSource"
 
@@ -64,6 +65,7 @@ export default function App() {
       <Route path="/billing" element={<Billing />} />
       <Route path="/notifications" element={<Notifications />} />
       <Route path="/team" element={<Team />} />
+      <Route path="/storyboard" element={<Storyboard />} />
       <Route path="/webhooks" element={<Webhooks />} />
       <Route path="/admin" element={<AdminOverview />} />
       <Route path="/admin/users" element={<AdminUsers />} />

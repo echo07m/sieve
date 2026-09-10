@@ -770,3 +770,23 @@ export const auditLogs = mysqlTable(
 );
 
 export type AuditLog = typeof auditLogs.$inferSelect;
+
+/** 分镜拆解结果：剧本 → 结构化分镜表（衔接视频生成 agent） */
+export const storyboards = mysqlTable(
+  "storyboards",
+  {
+    id: serial("id").primaryKey(),
+    userId: bigint("userId", { mode: "number", unsigned: true }).notNull(),
+    submissionId: bigint("submissionId", { mode: "number", unsigned: true }),
+    workTitle: varchar("workTitle", { length: 255 }).notNull(),
+    episodeCount: int("episodeCount").notNull().default(1),
+    shotCount: int("shotCount").notNull().default(0),
+    totalDurationSec: int("totalDurationSec").notNull().default(0),
+    shots: json("shots").notNull(), // StoryboardShot[]
+    engineVersion: varchar("engineVersion", { length: 32 }).notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  (t) => [index("storyboards_userId_idx").on(t.userId, t.createdAt)],
+);
+
+export type StoryboardRow = typeof storyboards.$inferSelect;

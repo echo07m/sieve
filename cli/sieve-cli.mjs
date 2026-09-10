@@ -21,6 +21,7 @@
  *   --output <path>      将 --format 结果写入文件而非 stdout
  *   --convert <fmt>      格式转换模式：fountain|fdx（Final Draft）→ Sieve Script JSON，不调用 API
  *   --usage              查询订阅额度用量（GET /api/v1/usage）后退出
+ *   --storyboard         分镜拆解模式：POST /api/v1/storyboard（不消耗配额）；--output .json 存分镜表，.txt 存逐镜提示词包
  *   -h, --help           帮助
  *
  * 退出码：0=通过  1=执行错误  2=命中阈值（合规门禁拦截）
@@ -52,6 +53,7 @@ function parseArgs(argv) {
       case "--output": args.output = next(); break;
       case "--convert": args.convert = next(); break;
       case "--usage": args.usage = true; break;
+      case "--storyboard": args.storyboard = true; break;
       case "-h": case "--help": args.help = true; break;
       default:
         console.error(`未知参数：${a}`);
@@ -254,6 +256,19 @@ function parseFdx(xml) {
   return elements;
 }
 
+
+/** 分镜 → 提示词包文本（--output .txt 时使用） */
+function storyboardPromptPack(sb) {
+  const lines = [`# 《${sb.workTitle}》分镜提示词包（共 ${sb.shotCount} 镜）`, ""];
+  for (const s of sb.shots ?? []) {
+    lines.push(`## 镜${s.shotNo}（第${s.episodeNo}集 · ${s.scene} · ${s.durationSec}s）`);
+    lines.push(s.agentPrompt);
+    if (s.dialogue) lines.push(`台词：${s.character ? s.character + "：" : ""}${s.dialogue}`);
+    lines.push("");
+  }
+  return lines.join("\n");
+}
+
 async function queryUsage(endpoint, key) {
   const resp = await fetch(`${endpoint}/api/v1/usage`, {
     headers: { Authorization: `Bearer ${key}` },
@@ -299,6 +314,32 @@ async function main() {
   if (args.usage) {
     if (!key) { console.error("缺少 API Key：--key 或环境变量 SIEVE_API_KEY"); process.exit(1); }
     await queryUsage(endpoint, key);
+    process.exit(0);
+  }
+
+  // 分镜拆解模式：剧本 → 结构化分镜表（含逐镜 agentPrompt），不消耗检测配额
+  if (args.storyboard) {
+    if (!args.file) { console.error("--storyboard 需要 --file"); process.exit(1); }
+    if (!key) { console.error("缺少 API Key：--key 或环境变量 SIEVE_API_KEY"); process.exit(1); }
+    const title = args.title ?? basename(args.file).replace(/\.[^.]+$/, "");
+    const scriptText = loadScript(args.file);
+    const resp = await fetch(`${endpoint}/api/v1/storyboard`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
+      body: JSON.stringify({ workTitle: title, scriptText }),
+    });
+    if (!resp.ok) {
+      console.error(`分镜拆解失败：HTTP ${resp.status} ${await resp.text()}`);
+      process.exit(1);
+    }
+    const sb = await resp.json();
+    if (args.output) {
+      const content = args.output.endsWith(".txt") ? storyboardPromptPack(sb) : JSON.stringify(sb, null, 2);
+      writeFileSync(args.output, content);
+      console.error(`已拆解 ${sb.shotCount} 镜（估算 ${Math.round(sb.totalDurationSec / 60)} 分钟）→ ${args.output}`);
+    } else {
+      console.log(JSON.stringify(sb, null, 2));
+    }
     process.exit(0);
   }
 

@@ -14,6 +14,7 @@ import { consumeQuota, getOrCreateSubscription, refundQuota } from "../queries/b
 import { getActiveRules, getLatestRuleVersion } from "../queries/compliance";
 import { getDb } from "../queries/connection";
 import { registerOpenApiRoute } from "./openapi";
+import { breakDownScript } from "../engine/storyboard";
 import {
   createDetectTask,
   getDetectTaskByNo,
@@ -40,6 +41,11 @@ function hitRateLimit(keyHash: string): boolean {
 }
 
 const PLATFORM_VALUES = ["universal", "hongguo", "fanqie", "kuaishou", "wechat"] as const;
+
+const storyboardBodySchema = z.object({
+  workTitle: z.string().min(1).max(255),
+  scriptText: z.string().min(10).max(2_000_000),
+});
 
 const detectBodySchema = z.object({
   workTitle: z.string().min(1).max(255),
@@ -293,6 +299,45 @@ export function registerV1Routes(app: Hono<any>): void {
       quotaRemaining: unlimited ? null : Math.max(0, sub.quotaTotal - sub.quotaUsed),
       expiresAt: sub.expiresAt,
     });
+  });
+
+  // ---------- 分镜拆解：POST /api/v1/storyboard（不消耗检测配额，共享 60 次/分钟限流） ----------
+  app.post("/api/v1/storyboard", async (c) => {
+    const authHeader = c.req.header("Authorization") ?? "";
+    const token = /^Bearer\s+(.+)$/i.exec(authHeader)?.[1]?.trim() ?? "";
+    if (!API_KEY_PATTERN.test(token)) {
+      return c.json({ error: "缺少或格式错误的 API Key" }, 401);
+    }
+    const keyHash = createHash("sha256").update(token).digest("hex");
+    const [keyRow] = await getDb()
+      .select({ userId: apiKeys.userId, status: apiKeys.status })
+      .from(apiKeys)
+      .where(eq(apiKeys.keyHash, keyHash))
+      .limit(1);
+    if (!keyRow || keyRow.status !== "active") {
+      return c.json({ error: "API Key 无效或已吊销" }, 401);
+    }
+    if (hitRateLimit(keyHash)) {
+      return c.json({ error: "请求过于频繁，单 Key 限额 60 次/分钟" }, 429);
+    }
+    let rawBody: unknown;
+    try {
+      rawBody = await c.req.json();
+    } catch {
+      return c.json({ error: "请求体必须是合法 JSON" }, 400);
+    }
+    const parsed = storyboardBodySchema.safeParse(rawBody);
+    if (!parsed.success) {
+      return c.json(
+        { error: "请求参数校验失败：workTitle 必填，scriptText 需 10-2000000 字" },
+        400,
+      );
+    }
+    const sb = breakDownScript(parsed.data.workTitle, parsed.data.scriptText);
+    if (sb.shotCount === 0) {
+      return c.json({ error: "未能从剧本中拆解出有效镜头，请检查文本格式" }, 422);
+    }
+    return c.json(sb);
   });
 
   // OpenAPI 规范端点（工具链契约）

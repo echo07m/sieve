@@ -15,6 +15,7 @@ import { publicToolsRouter } from "./publicToolsRouter";
 import { createRouter, publicQuery } from "./middleware";
 import { platformsRouter } from "./platformsRouter";
 import { policyRouter } from "./policyRouter";
+import { storyboardRouter } from "./storyboardRouter";
 import { teamRouter } from "./teamRouter";
 import { precedentRouter } from "./precedentRouter";
 import { remediateRouter } from "./remediateRouter";
@@ -46,6 +47,7 @@ export const appRouter = createRouter({
   webhooks: webhooksRouter,
   policy: policyRouter,
   team: teamRouter,
+  storyboard: storyboardRouter,
 });
 
 export type AppRouter = typeof appRouter;

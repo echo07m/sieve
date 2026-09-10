@@ -103,7 +103,36 @@ const TOOLS = [
     description: "查询当前 API Key 对应订阅的额度用量（用于判断是否需要控量）。",
     inputSchema: { type: "object", properties: {} },
   },
+  {
+    name: "sieve_storyboard",
+    description:
+      "剧本分镜拆解：把剧本拆成结构化分镜表（镜号/场景/景别/运镜/画面/台词/时长/情绪），" +
+      "每镜附 agentPrompt（可直接投喂即梦/可灵/Runway 等视频生成模型）。写完剧本先拆镜再生成视频。",
+    inputSchema: {
+      type: "object",
+      required: ["workTitle", "scriptText"],
+      properties: {
+        workTitle: { type: "string", description: "作品名称" },
+        scriptText: { type: "string", description: "剧本全文（支持「第N集」分集、【场景】场景标记）" },
+      },
+    },
+  },
 ];
+
+function formatStoryboard(data) {
+  const lines = [
+    `【分镜拆解】《${data.workTitle}》共 ${data.shotCount} 镜 ｜ ${data.episodeCount} 集 ｜ 估算总时长 ${Math.round((data.totalDurationSec ?? 0) / 60)} 分钟`,
+    "",
+  ];
+  for (const s of (data.shots ?? []).slice(0, 40)) {
+    lines.push(`镜${s.shotNo}｜第${s.episodeNo}集｜${s.scene}｜${s.shotType}/${s.cameraMove}｜${s.durationSec}s｜${s.mood}`);
+    lines.push(`  画面：${String(s.visual).slice(0, 80)}`);
+    if (s.dialogue) lines.push(`  台词：${s.character ? s.character + "：" : ""}${String(s.dialogue).slice(0, 60)}`);
+    lines.push(`  agentPrompt：${s.agentPrompt}`);
+  }
+  if ((data.shots ?? []).length > 40) lines.push(`……另有 ${data.shots.length - 40} 镜，建议用 POST /api/v1/storyboard 取完整 JSON`);
+  return lines.join("\n");
+}
 
 function formatDetectResult(data) {
   const s = data.summary ?? {};
@@ -163,6 +192,14 @@ async function callTool(name, args) {
           ? `方案：${data.planName}（不限量年框）｜ 已用 ${data.quotaUsed} 次 ｜ 状态 ${data.status}`
           : `方案：${data.planName} ｜ 额度 ${data.quotaUsed}/${data.quotaTotal}（剩余 ${data.quotaRemaining}）｜ 状态 ${data.status}`,
       };
+    }
+    case "sieve_storyboard": {
+      const { status, data } = await api("/api/v1/storyboard", {
+        method: "POST",
+        body: JSON.stringify({ workTitle: args.workTitle, scriptText: args.scriptText }),
+      });
+      if (status !== 200) return { text: `分镜拆解失败（HTTP ${status}）：${data.error ?? JSON.stringify(data)}`, isError: true };
+      return { text: formatStoryboard(data) };
     }
     default:
       return { text: `未知工具：${name}`, isError: true };

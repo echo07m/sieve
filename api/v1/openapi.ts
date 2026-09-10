@@ -195,13 +195,83 @@ export function buildOpenApiSpec(baseUrl = "") {
           },
         },
       },
+      "/api/v1/storyboard": {
+        post: {
+          operationId: "createStoryboard",
+          summary: "剧本分镜拆解（不消耗检测配额）：剧本 → 结构化分镜表 + 逐镜 agentPrompt",
+          description:
+            "把剧本文本拆解为分镜表，每镜含镜号/集/场景/景别/运镜/画面内容/台词/时长估算/情绪，" +
+            "并附面向视频生成模型（即梦/可灵/Runway 等）的 agentPrompt，衔接「剧本→分镜→成片」流水线。",
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["workTitle", "scriptText"],
+                  properties: {
+                    workTitle: { type: "string", maxLength: 255 },
+                    scriptText: { type: "string", minLength: 10, maxLength: 2000000, description: "支持「第N集」分集标记与【场景】场景标记" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "分镜拆解结果",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      workTitle: { type: "string" },
+                      episodeCount: { type: "integer" },
+                      shotCount: { type: "integer" },
+                      totalDurationSec: { type: "integer" },
+                      engineVersion: { type: "string" },
+                      shots: {
+                        type: "array",
+                        items: {
+                          type: "object",
+                          properties: {
+                            shotNo: { type: "integer" },
+                            episodeNo: { type: "integer" },
+                            scene: { type: "string" },
+                            character: { type: "string" },
+                            shotType: { type: "string", enum: ["long", "full", "medium", "close", "extreme_close"] },
+                            cameraMove: { type: "string", enum: ["fixed", "push", "pull", "pan", "follow", "handheld"] },
+                            visual: { type: "string" },
+                            dialogue: { type: "string" },
+                            durationSec: { type: "integer" },
+                            mood: { type: "string" },
+                            agentPrompt: { type: "string", description: "面向视频生成模型的单镜提示词" },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            "400": { description: "参数校验失败", content: { "application/json": { schema: errorSchema } } },
+            "401": { description: "API Key 无效", content: { "application/json": { schema: errorSchema } } },
+            "422": { description: "无法拆解出有效镜头", content: { "application/json": { schema: errorSchema } } },
+            "429": { description: "限流", content: { "application/json": { schema: errorSchema } } },
+          },
+        },
+      },
     },
     components: {
       securitySchemes: {
         bearerAuth: { type: "http", scheme: "bearer", description: "API Key：jhg_ 前缀 48 位 hex" },
       },
     },
-    tags: [{ name: "detect", description: "合规预检" }],
+    tags: [
+      { name: "detect", description: "合规预检" },
+      { name: "storyboard", description: "分镜拆解（送检前置）" },
+    ],
   };
 }
 
