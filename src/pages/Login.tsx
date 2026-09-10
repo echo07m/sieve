@@ -51,6 +51,17 @@ export default function Login() {
     navigate("/dashboard");
   };
 
+  /** 注册前本地预校验：直接给出中文提示，避免服务器 400 */
+  const validateRegister = (): string | null => {
+    if (!/^[\w一-龥-]{3,32}$/.test(regUsername.trim()))
+      return "用户名需 3-32 位，仅支持中英文、数字、下划线、连字符";
+    if (regPassword.length < 8) return "密码至少 8 位";
+    if (regPassword.length > 72) return "密码最多 72 位";
+    if (regEmail.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(regEmail.trim()))
+      return "邮箱格式不正确";
+    return null;
+  };
+
   const login = trpc.authLocal.login.useMutation({
     onSuccess: () => { toast.success("登录成功"); void onSuccess(); },
     onError: (e) => toast.error(e.message),
@@ -158,13 +169,15 @@ export default function Login() {
               <Button
                 className="w-full bg-amber-800 hover:bg-amber-900 text-white"
                 disabled={!regUsername || !regPassword || register.isPending}
-                onClick={() =>
+                onClick={() => {
+                  const err = validateRegister();
+                  if (err) { toast.error(err); return; }
                   register.mutate({
                     username: regUsername.trim(),
                     password: regPassword,
                     email: regEmail.trim() || undefined,
-                  })
-                }
+                  });
+                }}
               >
                 {register.isPending && <Loader2 className="h-4 w-4 mr-1 animate-spin" />}
                 注册并登录
