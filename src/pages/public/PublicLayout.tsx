@@ -49,13 +49,14 @@ export default function PublicLayout() {
               {t("footer.tagline")}
             </span>
           </Link>
-          <nav className="hidden md:flex items-center gap-1">
+          {/* 桌面导航：lg 起显示（英文文案较长，md 下会挤压溢出），超出时允许换行 */}
+          <nav className="hidden lg:flex items-center gap-0.5 flex-wrap">
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) =>
-                  `px-3 py-2 text-sm rounded-md transition-colors ${
+                  `px-2.5 py-2 text-sm rounded-md transition-colors whitespace-nowrap ${
                     isActive
                       ? "text-amber-900 font-medium bg-amber-50"
                       : "text-stone-600 hover:text-stone-900 hover:bg-stone-100"
@@ -69,7 +70,7 @@ export default function PublicLayout() {
           <div className="flex items-center gap-2 shrink-0">
             <LanguageSwitcher />
             <Button
-              className="bg-amber-800 hover:bg-amber-900 text-white hidden md:inline-flex"
+              className="bg-amber-800 hover:bg-amber-900 text-white hidden lg:inline-flex whitespace-nowrap"
               onClick={() => (window.location.href = LOGIN_PATH)}
             >
               {t("nav.login")}
@@ -80,7 +81,7 @@ export default function PublicLayout() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="md:hidden"
+                  className="lg:hidden"
                   aria-label={t("nav.menuLabel")}
                 >
                   <Menu className="h-5 w-5" />
@@ -131,7 +132,7 @@ export default function PublicLayout() {
       </main>
 
       <footer className="border-t border-stone-200 bg-white">
-        <div className="max-w-6xl mx-auto px-6 py-10 grid gap-8 sm:grid-cols-3 text-sm">
+        <div className="max-w-6xl mx-auto px-6 py-10 grid gap-8 sm:grid-cols-[1fr_1.4fr_1fr] text-sm">
           <div>
             <div className="flex items-center gap-2 mb-3">
               <ShieldCheck className="h-5 w-5 text-amber-800" />
@@ -143,21 +144,22 @@ export default function PublicLayout() {
           </div>
           <div>
             <p className="font-medium mb-3">{t("footer.quickLinks")}</p>
-            <ul className="space-y-2 text-stone-600">
+            {/* 入口较多：双列网格，避免纵向一长串导致视觉失衡 */}
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-2 text-stone-600">
               {navItems.map((item) => (
                 <li key={item.to}>
-                  <Link to={item.to} className="hover:text-amber-900">
+                  <Link to={item.to} className="hover:text-amber-900 break-words">
                     {item.label}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link to="/terms" className="hover:text-amber-900">
+                <Link to="/terms" className="hover:text-amber-900 break-words">
                   {t("footer.terms")}
                 </Link>
               </li>
               <li>
-                <Link to="/privacy" className="hover:text-amber-900">
+                <Link to="/privacy" className="hover:text-amber-900 break-words">
                   {t("footer.privacy")}
                 </Link>
               </li>

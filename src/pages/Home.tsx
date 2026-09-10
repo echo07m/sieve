@@ -59,6 +59,7 @@ export default function Home() {
     { to: "/tools/filing-wizard", label: t("nav.filingWizard") },
     { to: "/docs", label: t("nav.docs") },
     { to: "/faq", label: t("nav.faq") },
+    { to: "/cases", label: t("nav.cases") },
     { to: "/opensource", label: t("nav.opensource") },
   ];
 
@@ -69,20 +70,21 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-stone-50 to-white">
       <header className="border-b border-stone-200 bg-white/80 backdrop-blur sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2 shrink-0">
             <ShieldCheck className="h-6 w-6 text-amber-800" />
-            <span className="font-semibold text-lg tracking-tight">剧合规</span>
-            <span className="text-xs text-muted-foreground hidden sm:inline">
+            <span className="font-semibold text-lg tracking-tight whitespace-nowrap">剧合规</span>
+            <span className="text-xs text-muted-foreground hidden 2xl:inline">
               {t("footer.tagline")}
             </span>
           </div>
-          <nav className="hidden md:flex items-center gap-1 mr-2">
+          {/* 桌面导航 lg 起显示；英文文案较长，md 下会挤压换行 */}
+          <nav className="hidden lg:flex items-center gap-0.5 mr-2">
             {footerLinks.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
-                className="px-3 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-md transition-colors"
+                className="px-2.5 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-md transition-colors whitespace-nowrap"
               >
                 {l.label}
               </Link>
@@ -98,11 +100,25 @@ export default function Home() {
             </Button>
           </div>
         </div>
+        {/* 中小屏导航：横向滚动条，避免挤占头部 */}
+        <div className="lg:hidden border-t border-stone-100 overflow-x-auto">
+          <nav className="max-w-6xl mx-auto px-4 flex items-center gap-1 whitespace-nowrap">
+            {footerLinks.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                className="px-3 py-2 text-sm text-stone-600 hover:text-stone-900 rounded-md"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
       </header>
 
       <main className="max-w-6xl mx-auto px-6">
         <section className="py-20 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-stone-200 px-3 py-1 text-xs text-muted-foreground mb-6">
+          <div className="inline-flex items-center gap-2 rounded-2xl border border-stone-200 px-4 py-1.5 text-xs text-muted-foreground mb-6 max-w-2xl leading-relaxed">
             {t("home.heroBadge")}
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
@@ -113,7 +129,7 @@ export default function Home() {
           <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
             {t("home.heroDesc")}
           </p>
-          <div className="mt-10 flex items-center justify-center gap-4">
+          <div className="mt-10 flex items-center justify-center gap-4 flex-wrap">
             <Button
               size="lg"
               className="bg-amber-800 hover:bg-amber-900 text-white"
@@ -248,15 +264,16 @@ export default function Home() {
         </section>
 
         <footer className="border-t border-stone-200 py-8 text-center text-xs text-muted-foreground pb-12 space-y-3">
-          <div className="flex justify-center items-center gap-6">
+          {/* 快速入口：允许换行、固定间距，避免英文长文案下错位 */}
+          <div className="flex justify-center items-center gap-x-6 gap-y-2 flex-wrap px-4">
             {footerLinks.map((l) => (
-              <Link key={l.to} to={l.to} className="hover:text-amber-900">
+              <Link key={l.to} to={l.to} className="hover:text-amber-900 whitespace-nowrap">
                 {l.label}
               </Link>
             ))}
             <LanguageSwitcher compact />
           </div>
-          <p>{t("footer.disclaimer")}</p>
+          <p className="px-4">{t("footer.disclaimer")}</p>
         </footer>
       </main>
     </div>
